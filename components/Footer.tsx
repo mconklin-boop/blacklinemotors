@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { commercialVehicleDisclosure, generalVehicleDisclosure } from "@/lib/disclosures";
 
 const links = [
@@ -18,10 +19,12 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
         <div>
           <div className="mb-4 flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center border border-blackline-steel bg-blackline-graphite text-sm font-black">BM</span>
+            <span className="relative h-14 w-40 overflow-hidden rounded-sm border border-white/10 bg-gradient-to-br from-zinc-700 to-black">
+              <Image src="/blackline-logo-header.png" alt="Blackline Motors" fill sizes="160px" className="object-contain p-1.5" />
+            </span>
             <div>
               <p className="font-black uppercase tracking-widest text-white">Blackline Motors</p>
-              <p className="text-xs uppercase text-blackline-steel">Logo placeholder</p>
+              <p className="text-xs uppercase text-blackline-steel">Automotive sales and fleet access</p>
             </div>
           </div>
           <p className="max-w-xl text-sm leading-6 text-blackline-silver">{generalVehicleDisclosure}</p>
