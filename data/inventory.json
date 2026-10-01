@@ -1,0 +1,42 @@
+[
+  {
+    "id": "BLM-0001",
+    "stockNumber": "BLM-0001",
+    "slug": "2006-hummer-h3",
+    "transactionType": "For Sale",
+    "year": 2006,
+    "make": "Hummer",
+    "model": "H3",
+    "trim": "",
+    "vin": "5GTDN136568323584",
+    "mileage": 142402,
+    "exteriorColor": "Blue-gray (from photos)",
+    "interiorColor": "Tan (from photos)",
+    "engine": "3.5L gasoline (owner-reported; verify)",
+    "transmission": "Automatic (shown in photos)",
+    "drivetrain": "Pending verification",
+    "fuelType": "Gasoline",
+    "titleType": "Pending verification",
+    "titleState": "Pending verification",
+    "category": "SUV",
+    "location": "Denver area, Colorado",
+    "availabilityStatus": "Coming Soon",
+    "condition": "Used; engine diagnosis pending",
+    "description": "2006 Hummer H3 with a blue-gray exterior, tan interior and 142,402 miles shown in the supplied odometer photo. Acquired through auction and currently awaiting engine diagnosis. Pricing, repair plan, title documentation and sale readiness will be updated after review. This vehicle is not currently ready for purchase.",
+    "knownDamage": "Visible cosmetic wear, upholstery creasing and interior soiling in the source photos. Full condition inspection has not been completed.",
+    "repairsCompleted": "No completed repairs confirmed for this listing.",
+    "knownMechanicalIssues": "Owner-reported engine noise, described as coming from the bottom end. Diagnosis and repair decision pending. Driving condition and roadworthiness are not confirmed.",
+    "featured": true,
+    "photos": [
+      "/inventory/BLM-0001/front-cleaned.webp",
+      "/inventory/BLM-0001/rear-cleaned.webp",
+      "/inventory/BLM-0001/interior-cleaned.webp",
+      "/inventory/BLM-0001/front-original.webp",
+      "/inventory/BLM-0001/interior-original.webp",
+      "/inventory/BLM-0001/odometer-original.webp",
+      "/inventory/BLM-0001/vin-original.webp"
+    ],
+    "photoNotes": "Exterior backgrounds and lighting have been edited for presentation. Original exterior, interior, odometer and VIN-label photos are included for reference. Photos are not a condition inspection.",
+    "createdAt": "2026-09-30"
+  }
+]

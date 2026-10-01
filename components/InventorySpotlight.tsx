@@ -46,8 +46,7 @@ export function InventorySpotlight({ vehicles }: { vehicles: Vehicle[] }) {
         ))}
       </div>
       <p className="sample-note">
-        Design preview · Sample vehicles, pricing, and illustrative photography.
-        Real inventory coming next.
+        Coming-soon vehicles are awaiting preparation. Availability, pricing, and condition are confirmed before purchase.
       </p>
     </section>
   );

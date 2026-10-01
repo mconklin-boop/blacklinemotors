@@ -67,10 +67,10 @@ export default async function VehicleDetailPage({ params }: Props) {
       />
       <Section>
         <p className="preview-notice">
-          Design preview · Sample listing and illustrative photography. This
-          vehicle is not an actual offer for sale.
+          {vehicle.availabilityStatus === "Coming Soon" ? "Coming soon · Pricing and sale readiness pending. This vehicle is not ready for purchase." : "Review the condition disclosures and confirm availability before purchase."}
         </p>
         <VehicleGallery vehicle={vehicle} />
+        {vehicle.photoNotes && <p className="mt-4 text-sm text-gray-600">{vehicle.photoNotes}</p>}
         <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px]">
           <div>
             <div className="mb-5 flex flex-wrap items-center gap-3">
@@ -87,12 +87,13 @@ export default async function VehicleDetailPage({ params }: Props) {
             <h1 className="text-4xl font-bold tracking-tight text-blackline-black">
               {vehicle.year} {vehicle.make} {vehicle.model} {vehicle.trim}
             </h1>
+            <p className="mt-2 text-sm text-gray-600">Stock {vehicle.stockNumber ?? vehicle.id}</p>
             <p className="mt-3 text-2xl font-black text-gray-600">
               {isLease
                 ? vehicle.monthlyRate
                   ? `${formatCurrency(vehicle.monthlyRate)}/mo`
                   : "Request Pricing"
-                : formatCurrency(vehicle.price)}
+                : vehicle.price ? formatCurrency(vehicle.price) : "Pricing pending"}
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
               {vehicle.description}

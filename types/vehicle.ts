@@ -9,6 +9,8 @@ export type AvailabilityStatus = "Available" | "Coming Soon" | "Pending" | "Sold
 
 export type Vehicle = {
   id: string;
+  stockNumber?: string;
+  photoNotes?: string;
   slug: string;
   transactionType: TransactionType;
   year: number;
@@ -53,3 +55,4 @@ export type Vehicle = {
   photos: string[];
   createdAt: string;
 };
+

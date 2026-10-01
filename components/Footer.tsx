@@ -49,10 +49,7 @@ export function Footer() {
         </div>
       </div>
       <p className="footer-disclaimer wrap">
-        Design preview: inventory records and vehicle photography are
-        illustrative. Listed vehicles and prices are sample data, not offers for
-        sale. Availability, pricing, condition, title, and financing must be
-        verified before purchase.
+        Vehicle availability, pricing, condition, title, and financing are subject to verification. Coming-soon vehicles are not ready for purchase. Review each listing’s condition disclosures and photograph notes.
       </p>
     </footer>
   );

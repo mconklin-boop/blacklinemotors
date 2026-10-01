@@ -25,9 +25,7 @@ export default async function VehiclesPage({
       </div>
       <div className="wrap">
         <p className="preview-notice">
-          Design preview: these are sample listings with illustrative
-          photography. Actual inventory and pricing will be added before
-          customer launch.
+          Browse Blackline Motors inventory. Coming-soon vehicles are awaiting diagnosis or preparation; pricing and sale readiness will be updated when confirmed.
         </p>
         <InventoryClient
           key={[get("q"), get("category"), get("make"), get("budget")].join(

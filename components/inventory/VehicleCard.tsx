@@ -13,12 +13,12 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
       >
         <Image
           src={vehicle.photos[0]}
-          alt={`Illustrative photography for sample ${vehicle.make} ${vehicle.model} listing`}
+          alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
           fill
           sizes="(min-width: 1100px) 31vw, (min-width: 650px) 46vw, 95vw"
           className="object-cover"
         />
-        <span className="photo-label">Sample listing</span>
+        <span className="photo-label">{vehicle.stockNumber ?? vehicle.availabilityStatus}</span>
         <span className="photo-arrow">
           <ArrowUpRight size={20} />
         </span>
@@ -56,8 +56,8 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         </div>
         <div className="vehicle-price">
           <div>
-            <small>Sample asking price</small>
-            <strong>{formatCurrency(vehicle.price)}</strong>
+            <small>{vehicle.price ? "Asking price" : "Pricing pending"}</small>
+            <strong>{vehicle.price ? formatCurrency(vehicle.price) : "Coming soon"}</strong>
           </div>
           <Link href={`/vehicle/${vehicle.slug}`}>
             Explore vehicle <ArrowUpRight size={17} />
