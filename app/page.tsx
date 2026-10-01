@@ -12,6 +12,10 @@ import {
 } from "lucide-react";
 import { InventorySpotlight } from "@/components/InventorySpotlight";
 import { saleVehicles } from "@/data/vehicles";
+import { selectSpotlight } from "@/lib/spotlight";
+
+// Evaluate the current rotation on every visit, rather than freezing it at build time.
+export const dynamic = "force-dynamic";
 const hero =
   "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=2400&q=85";
 const categories = [
@@ -132,7 +136,10 @@ export default function HomePage() {
           <Compass size={19} /> Personal vehicle sourcing
         </span>
       </div>
-      <InventorySpotlight vehicles={saleVehicles.filter((v) => v.featured)} />
+      <InventorySpotlight
+        vehicles={saleVehicles.filter((v) => ["Available", "Coming Soon"].includes(v.availabilityStatus))}
+        spotlight={selectSpotlight(saleVehicles)}
+      />
       <section className="category-section wrap">
         <div className="section-heading">
           <div>

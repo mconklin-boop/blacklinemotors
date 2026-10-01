@@ -11,3 +11,6 @@ For each intake: extract and reconcile facts, choose photos, retain original con
 Use Coming Soon while diagnosis, sale terms or readiness are pending. Auction SOLD means purchased at auction, not sold to a Blackline customer. Do not infer clean title, roadworthiness or completed repairs from auction photography. Never retouch damage, warning lights, odometer digits or upholstery wear. Label background edits and retain original photos.
 
 Facebook and Marketplace output is draft copy. Posting is a separate action. A coming-soon vehicle without an asking price stays a Marketplace draft until price and sale condition are supplied.
+# Homepage spotlight
+
+The homepage rotates its main spotlight every 10 Denver calendar days, starting September 30, 2026. It cycles through published sale inventory in stable stock-ID order, including Available and clearly labeled Coming Soon vehicles with photographs. Sold, Pending and Unavailable vehicles are excluded. With one eligible vehicle it stays featured; with none the spotlight is omitted. Updating inventory may immediately change the selected vehicle. The homepage calculates the rotation on each visit, so no manual republishing is required for a scheduled rotation. Other inventory remains browsable below the spotlight.

@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
 import { VehicleCard } from "@/components/inventory/VehicleCard";
 const tabs = ["All vehicles", "Trucks", "SUVs", "Cars"];
-export function InventorySpotlight({ vehicles }: { vehicles: Vehicle[] }) {
+export function InventorySpotlight({ vehicles, spotlight }: { vehicles: Vehicle[]; spotlight?: Vehicle }) {
   const [tab, setTab] = useState("All vehicles");
   const shown = vehicles.filter(
     (v) =>
@@ -27,6 +27,19 @@ export function InventorySpotlight({ vehicles }: { vehicles: Vehicle[] }) {
           View all inventory <ArrowUpRight size={19} />
         </Link>
       </div>
+      {spotlight && (
+        <div className="rotating-spotlight">
+          <VehicleCard vehicle={spotlight} />
+          <div className="rotating-spotlight-copy">
+            <p className="eyebrow">In the spotlight</p>
+            <h3>{spotlight.year} {spotlight.make} {spotlight.model}</h3>
+            <p>{spotlight.description}</p>
+            <Link className="red-button" href={`/vehicle/${spotlight.slug}`}>
+              Explore this vehicle <ArrowUpRight size={19} />
+            </Link>
+          </div>
+        </div>
+      )}
       <div className="inventory-tabs" aria-label="Featured inventory filters">
         {tabs.map((t) => (
           <button
@@ -45,6 +58,7 @@ export function InventorySpotlight({ vehicles }: { vehicles: Vehicle[] }) {
           <VehicleCard key={v.id} vehicle={v} />
         ))}
       </div>
+      {shown.length === 0 && <p>No vehicles in this category right now. Browse all inventory or ask us to help find your vehicle.</p>}
       <p className="sample-note">
         Coming-soon vehicles are awaiting preparation. Availability, pricing, and condition are confirmed before purchase.
       </p>
