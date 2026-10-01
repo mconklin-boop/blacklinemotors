@@ -4,7 +4,7 @@ export function Field({
   type = "text",
   required = false,
   options,
-  textarea = false
+  textarea = false,
 }: {
   label: string;
   name: string;
@@ -13,10 +13,11 @@ export function Field({
   options?: string[];
   textarea?: boolean;
 }) {
-  const base = "w-full rounded-md border border-white/15 bg-blackline-charcoal px-4 py-3 text-white outline-none focus:border-white";
+  const base =
+    "w-full rounded-md border border-gray-200 bg-gray-100 px-4 py-3 text-blackline-black outline-none focus:border-blackline-red";
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-bold text-white">
+      <span className="mb-2 block text-sm font-bold text-blackline-black">
         {label}
         {required ? " *" : ""}
       </span>

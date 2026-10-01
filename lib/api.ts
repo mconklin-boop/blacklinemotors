@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import type { ZodSchema } from "zod";
 
-export async function handleFormSubmission(request: Request, schema: ZodSchema, label: string) {
+export async function handleFormSubmission(
+  request: Request,
+  schema: ZodSchema,
+  label: string,
+) {
   const body = await request.json().catch(() => null);
   const result = schema.safeParse(body);
 
@@ -10,16 +14,20 @@ export async function handleFormSubmission(request: Request, schema: ZodSchema, 
       {
         ok: false,
         message: "Please review the highlighted fields and try again.",
-        errors: result.error.flatten().fieldErrors
+        errors: result.error.flatten().fieldErrors,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
-  if (process.env.NODE_ENV === "development") {
-    console.info(`[Blackline Motors] ${label} submission`, result.data);
-  }
-
-  // TODO: Save validated submissions to Supabase and send notification email after production integrations are configured.
-  return NextResponse.json({ ok: true, message: "Thanks. Blackline Motors received your submission." });
+  void label;
+  // Do not report a delivered inquiry until lead storage and notifications are configured.
+  return NextResponse.json(
+    {
+      ok: false,
+      message:
+        "Online inquiries are not connected yet. This design preview does not save or send submissions.",
+    },
+    { status: 503 },
+  );
 }

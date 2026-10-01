@@ -3,3 +3,4 @@ export const generalVehicleDisclosure =
 
 export const commercialVehicleDisclosure =
   "Vehicle availability may be fulfilled through Blackline Motors' commercial fleet and rental partners. Pricing, deposits, mileage allowances, maintenance requirements, insurance requirements, approval criteria, and vehicle availability are subject to the final rental or lease agreement.";
+

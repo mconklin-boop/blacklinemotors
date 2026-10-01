@@ -113,3 +113,4 @@ export const schemas = {
   partnership: partnershipSchema,
   financing: financingSchema
 };
+
