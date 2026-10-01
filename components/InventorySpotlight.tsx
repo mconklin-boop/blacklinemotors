@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
 import { VehicleCard } from "@/components/inventory/VehicleCard";
-const tabs = ["All vehicles", "Trucks", "SUVs"];
+const tabs = ["All vehicles", "Trucks", "SUVs", "Cars"];
 export function InventorySpotlight({ vehicles }: { vehicles: Vehicle[] }) {
   const [tab, setTab] = useState("All vehicles");
   const shown = vehicles.filter(
@@ -12,7 +12,7 @@ export function InventorySpotlight({ vehicles }: { vehicles: Vehicle[] }) {
       tab === "All vehicles" ||
       (tab === "Trucks"
         ? v.category.toLowerCase().includes("truck")
-        : v.category.toLowerCase().includes("suv")),
+        : tab === "SUVs" ? v.category.toLowerCase().includes("suv") : v.category.toLowerCase().includes("car")),
   );
   return (
     <section className="spotlight wrap" id="spotlight">
