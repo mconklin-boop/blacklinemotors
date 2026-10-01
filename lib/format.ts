@@ -10,3 +10,4 @@ export function formatCurrency(value?: number) {
 export function formatMiles(value: number) {
   return `${new Intl.NumberFormat("en-US").format(value)} mi`;
 }
+

@@ -1,46 +1,68 @@
 import Image from "next/image";
-import { Button } from "@/components/Button";
-import { StatusBadge } from "@/components/StatusBadge";
+import Link from "next/link";
+import { ArrowUpRight, Gauge, MapPin } from "lucide-react";
 import { formatCurrency, formatMiles } from "@/lib/format";
 import type { Vehicle } from "@/types/vehicle";
-
 export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
-    <article className="overflow-hidden rounded-md border border-white/10 bg-blackline-graphite">
-      <div className="relative aspect-[4/3] bg-blackline-charcoal">
-        <Image src={vehicle.photos[0]} alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
-      </div>
-      <div className="space-y-4 p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-xl font-black uppercase text-white">
-              {vehicle.year} {vehicle.make} {vehicle.model}
-            </h3>
-            <p className="text-sm text-blackline-silver">{vehicle.trim}</p>
-          </div>
-          <StatusBadge status={vehicle.availabilityStatus} />
+    <article className="vehicle-card">
+      <Link
+        className="vehicle-photo"
+        href={`/vehicle/${vehicle.slug}`}
+        aria-label={`View ${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+      >
+        <Image
+          src={vehicle.photos[0]}
+          alt={`Illustrative photography for sample ${vehicle.make} ${vehicle.model} listing`}
+          fill
+          sizes="(min-width: 1100px) 31vw, (min-width: 650px) 46vw, 95vw"
+          className="object-cover"
+        />
+        <span className="photo-label">Sample listing</span>
+        <span className="photo-arrow">
+          <ArrowUpRight size={20} />
+        </span>
+      </Link>
+      <div className="vehicle-info">
+        <div className="vehicle-kicker">
+          <span>
+            {vehicle.year} · {vehicle.drivetrain}
+          </span>
+          <span
+            className={
+              vehicle.availabilityStatus === "Available"
+                ? "available"
+                : "coming"
+            }
+          >
+            {vehicle.availabilityStatus}
+          </span>
         </div>
-        <dl className="grid grid-cols-2 gap-3 text-sm">
+        <h3>
+          <Link href={`/vehicle/${vehicle.slug}`}>
+            {vehicle.make} {vehicle.model}
+          </Link>
+        </h3>
+        <p className="vehicle-trim">{vehicle.trim}</p>
+        <div className="vehicle-meta">
+          <span>
+            <Gauge size={15} />
+            {formatMiles(vehicle.mileage)}
+          </span>
+          <span>
+            <MapPin size={15} />
+            {vehicle.location}
+          </span>
+        </div>
+        <div className="vehicle-price">
           <div>
-            <dt className="text-blackline-steel">Mileage</dt>
-            <dd className="font-semibold text-white">{formatMiles(vehicle.mileage)}</dd>
+            <small>Sample asking price</small>
+            <strong>{formatCurrency(vehicle.price)}</strong>
           </div>
-          <div>
-            <dt className="text-blackline-steel">Price</dt>
-            <dd className="font-semibold text-white">{formatCurrency(vehicle.price)}</dd>
-          </div>
-          <div>
-            <dt className="text-blackline-steel">Title</dt>
-            <dd className="font-semibold text-white">{vehicle.titleType}</dd>
-          </div>
-          <div>
-            <dt className="text-blackline-steel">Location</dt>
-            <dd className="font-semibold text-white">{vehicle.location}</dd>
-          </div>
-        </dl>
-        <Button href={`/vehicle/${vehicle.slug}`} variant="secondary" className="w-full">
-          View Vehicle
-        </Button>
+          <Link href={`/vehicle/${vehicle.slug}`}>
+            Explore vehicle <ArrowUpRight size={17} />
+          </Link>
+        </div>
       </div>
     </article>
   );

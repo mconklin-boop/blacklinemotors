@@ -1,91 +1,84 @@
 "use client";
-
 import Link from "next/link";
-import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/components/Button";
-
-const nav = [
-  ["Vehicles for Sale", "/vehicles"],
-  ["Lease Vehicles", "/lease"],
-  ["Request a Vehicle", "/request-vehicle"],
-  ["Sell Your Vehicle", "/sell-your-vehicle"],
-  ["Partnerships", "/partnerships"],
+import { ArrowUpRight, Menu, X, MapPin } from "lucide-react";
+const links = [
+  ["Inventory", "/vehicles"],
+  ["Sell / trade", "/sell-your-vehicle"],
+  ["Find my vehicle", "/request-vehicle"],
   ["Financing", "/financing"],
-  ["About", "/about"],
-  ["Contact", "/contact"]
+  ["About us", "/about"],
 ];
-
 export function Header() {
   const [open, setOpen] = useState(false);
-
+  const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-blackline-black/90 shadow-[0_18px_60px_rgba(0,0,0,0.32)] backdrop-blur-xl">
-      <div className="h-1 bg-gradient-to-r from-blackline-steel via-white to-blackline-steel" />
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8" aria-label="Main navigation">
+    <header className="site-header">
+      <div className="utility-bar">
+        <span>
+          <MapPin size={12} /> Denver, Colorado
+        </span>
+        <span>Independent. Driven by you.</span>
+        <Link href="/contact">
+          Contact our team <ArrowUpRight size={12} />
+        </Link>
+      </div>
+      <div className="nav-shell">
         <Link
+          className="brand"
           href="/"
-          className="group flex min-w-0 items-center gap-3 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          aria-label="Blackline Motors home"
+          onClick={() => setOpen(false)}
         >
-          <span className="relative h-14 w-36 overflow-hidden rounded-sm border border-white/10 bg-gradient-to-br from-zinc-700 to-black shadow-inner sm:w-44">
-            <Image
-              src="/blackline-logo-header.png"
-              alt="Blackline Motors"
-              fill
-              priority
-              sizes="176px"
-              className="object-contain p-1.5 transition duration-200 group-hover:scale-[1.02]"
-            />
+          <span className="brand-mark">
+            B<span>／</span>
           </span>
-          <span className="hidden border-l border-white/15 pl-3 xl:block">
-            <span className="block text-[11px] font-black uppercase tracking-[0.28em] text-white">Blackline Motors</span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-blackline-steel">Sales / Lease / Fleet</span>
+          <span>
+            BLACKLINE<small>M O T O R S</small>
           </span>
         </Link>
-        <div className="hidden items-center gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1.5 lg:flex">
-          {nav.map(([label, href]) => (
+        <nav className="desktop-nav" aria-label="Main navigation">
+          {links.map(([label, href]) => (
             <Link
-              key={href}
+              className={pathname === href ? "active" : ""}
               href={href}
-              className="rounded-sm px-3 py-2 text-xs font-bold uppercase tracking-wide text-blackline-silver transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              key={href}
             >
               {label}
             </Link>
           ))}
-        </div>
-        <div className="hidden shrink-0 lg:block">
-          <Button href="/vehicles">Browse Vehicles</Button>
-        </div>
+        </nav>
+        <Link className="nav-shop" href="/vehicles">
+          Shop inventory <ArrowUpRight size={16} />
+        </Link>
         <button
-          type="button"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 bg-white/[0.04] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:hidden"
-          onClick={() => setOpen((value) => !value)}
+          className="menu-toggle"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label="Toggle navigation menu"
+          onClick={() => setOpen(!open)}
         >
-          {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          {open ? <X /> : <Menu />}
         </button>
-      </nav>
+      </div>
       {open && (
-        <div id="mobile-menu" className="border-t border-white/10 bg-blackline-black/98 px-4 py-5 shadow-metal lg:hidden">
-          <div className="grid gap-2 rounded-md border border-white/10 bg-white/[0.04] p-2">
-            {nav.map(([label, href]) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className="rounded-sm px-3 py-3 text-sm font-bold uppercase tracking-wide text-blackline-silver hover:bg-white/10 hover:text-white"
-              >
-                {label}
-              </Link>
-            ))}
-            <Button href="/vehicles" className="mt-2 w-full" onClick={() => setOpen(false)}>
-              Browse Vehicles
-            </Button>
-          </div>
-        </div>
+        <nav
+          id="mobile-menu"
+          className="mobile-nav"
+          aria-label="Mobile navigation"
+        >
+          {links.map(([label, href]) => (
+            <Link href={href} key={href} onClick={() => setOpen(false)}>
+              {label}
+              <ArrowUpRight size={17} />
+            </Link>
+          ))}
+          <Link href="/contact" onClick={() => setOpen(false)}>
+            Contact us
+            <ArrowUpRight size={17} />
+          </Link>
+        </nav>
       )}
     </header>
   );

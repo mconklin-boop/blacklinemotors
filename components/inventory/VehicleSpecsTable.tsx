@@ -16,11 +16,16 @@ export function VehicleSpecsTable({ vehicle }: { vehicle: Vehicle }) {
     ["Drivetrain", vehicle.drivetrain],
     ["Fuel Type", vehicle.fuelType],
     ["Location", vehicle.location],
-    ["Title Status", `${vehicle.titleType} - ${vehicle.titleState}`]
+    ["Title Status", `${vehicle.titleType} - ${vehicle.titleState}`],
   ];
 
   const leaseRows = [
-    ["Monthly Rate", vehicle.monthlyRate ? `${formatCurrency(vehicle.monthlyRate)}/mo` : "Request Pricing"],
+    [
+      "Monthly Rate",
+      vehicle.monthlyRate
+        ? `${formatCurrency(vehicle.monthlyRate)}/mo`
+        : "Request Pricing",
+    ],
     ["Security Deposit", formatCurrency(vehicle.securityDeposit)],
     ["Initial Payment", formatCurrency(vehicle.initialPayment)],
     ["Mileage Allowance", vehicle.mileageAllowance],
@@ -31,17 +36,30 @@ export function VehicleSpecsTable({ vehicle }: { vehicle: Vehicle }) {
     ["Insurance Requirements", vehicle.insuranceRequirements],
     ["Business Qualification", vehicle.qualificationRequirements],
     ["Delivery", vehicle.deliveryAvailable],
-    ["Availability Date", vehicle.availabilityDate]
+    ["Availability Date", vehicle.availabilityDate],
   ];
 
-  const allRows = ["Monthly Lease", "Commercial Rental", "Lease-to-Own"].includes(vehicle.transactionType) ? [...rows, ...leaseRows] : rows;
+  const allRows = [
+    "Monthly Lease",
+    "Commercial Rental",
+    "Lease-to-Own",
+  ].includes(vehicle.transactionType)
+    ? [...rows, ...leaseRows]
+    : rows;
 
   return (
-    <dl className="grid overflow-hidden rounded-md border border-white/10 sm:grid-cols-2">
+    <dl className="grid overflow-hidden rounded-md border border-gray-200 sm:grid-cols-2">
       {allRows.map(([label, value]) => (
-        <div key={String(label)} className="border-b border-white/10 p-4 even:bg-white/[0.03] sm:border-r">
-          <dt className="text-xs font-bold uppercase tracking-wide text-blackline-steel">{label}</dt>
-          <dd className="mt-1 text-sm font-semibold text-white">{value ?? "Request details"}</dd>
+        <div
+          key={String(label)}
+          className="border-b border-gray-200 p-4 even:bg-gray-50 sm:border-r"
+        >
+          <dt className="text-xs font-bold uppercase tracking-wide text-gray-500">
+            {label}
+          </dt>
+          <dd className="mt-1 text-sm font-semibold text-blackline-black">
+            {value ?? "Request details"}
+          </dd>
         </div>
       ))}
     </dl>

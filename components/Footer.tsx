@@ -1,58 +1,63 @@
 import Link from "next/link";
-import Image from "next/image";
-import { commercialVehicleDisclosure, generalVehicleDisclosure } from "@/lib/disclosures";
-
-const links = [
-  ["Vehicles", "/vehicles"],
-  ["Lease Vehicles", "/lease"],
-  ["Request", "/request-vehicle"],
-  ["Sell", "/sell-your-vehicle"],
-  ["Partnerships", "/partnerships"],
-  ["Financing", "/financing"],
-  ["Privacy Policy", "/privacy-policy"],
-  ["Terms of Use", "/terms-of-use"]
-];
-
+import { ArrowUpRight } from "lucide-react";
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-blackline-black">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
+    <footer className="site-footer">
+      <div className="footer-top wrap">
         <div>
-          <div className="mb-4 flex items-center gap-3">
-            <span className="relative h-14 w-40 overflow-hidden rounded-sm border border-white/10 bg-gradient-to-br from-zinc-700 to-black">
-              <Image src="/blackline-logo-header.png" alt="Blackline Motors" fill sizes="160px" className="object-contain p-1.5" />
+          <Link href="/" className="brand">
+            <span className="brand-mark">
+              B<span>／</span>
             </span>
-            <div>
-              <p className="font-black uppercase tracking-widest text-white">Blackline Motors</p>
-              <p className="text-xs uppercase text-blackline-steel">Automotive sales and fleet access</p>
-            </div>
-          </div>
-          <p className="max-w-xl text-sm leading-6 text-blackline-silver">{generalVehicleDisclosure}</p>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-blackline-silver">{commercialVehicleDisclosure}</p>
+            <span>
+              BLACKLINE<small>M O T O R S</small>
+            </span>
+          </Link>
+          <p>
+            Good vehicles. Clear information.
+            <br />
+            Your next chapter starts here.
+          </p>
+          <span className="footer-location">Denver, Colorado</span>
         </div>
         <div>
-          <h2 className="mb-4 text-sm font-black uppercase tracking-wide text-white">Navigation</h2>
-          <div className="grid gap-2">
-            {links.map(([label, href]) => (
-              <Link key={href} href={href} className="text-sm text-blackline-silver hover:text-white">
-                {label}
-              </Link>
-            ))}
-          </div>
+          <h3>Find your drive</h3>
+          <Link href="/vehicles">Shop inventory</Link>
+          <Link href="/request-vehicle">Vehicle sourcing</Link>
+          <Link href="/lease">Commercial vehicles</Link>
         </div>
         <div>
-          <h2 className="mb-4 text-sm font-black uppercase tracking-wide text-white">Contact</h2>
-          <div className="space-y-2 text-sm text-blackline-silver">
-            <p>Phone: (000) 000-0000</p>
-            <p>Email: sales@blacklinemotors.example</p>
-            <p>Service Area: Mountain West and partner markets</p>
-            <p>Social: Instagram, Facebook, LinkedIn placeholders</p>
-          </div>
+          <h3>Shopping tools</h3>
+          <Link href="/sell-your-vehicle">Sell or trade your vehicle</Link>
+          <Link href="/financing">Explore financing</Link>
+          <Link href="/about">About Blackline</Link>
+        </div>
+        <div>
+          <h3>Let’s talk vehicles</h3>
+          <p>
+            Have something in mind?
+            <br />
+            We’d like to hear about it.
+          </p>
+          <Link className="footer-contact" href="/contact">
+            Get in touch <ArrowUpRight size={18} />
+          </Link>
+          <Link href="/partnerships">Partner with us</Link>
         </div>
       </div>
-      <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-blackline-steel">
-        Copyright {new Date().getFullYear()} Blackline Motors. All rights reserved.
+      <div className="footer-bottom wrap">
+        <span>© {new Date().getFullYear()} Blackline Motors</span>
+        <div>
+          <Link href="/privacy-policy">Privacy</Link>
+          <Link href="/terms-of-use">Terms</Link>
+        </div>
       </div>
+      <p className="footer-disclaimer wrap">
+        Design preview: inventory records and vehicle photography are
+        illustrative. Listed vehicles and prices are sample data, not offers for
+        sale. Availability, pricing, condition, title, and financing must be
+        verified before purchase.
+      </p>
     </footer>
   );
 }

@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { vehicles } from "@/data/vehicles";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://blacklinemotors.example";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://blacklinemotors.example";
   const routes = [
     "",
     "/vehicles",
@@ -14,17 +15,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about",
     "/contact",
     "/privacy-policy",
-    "/terms-of-use"
+    "/terms-of-use",
   ];
 
   return [
     ...routes.map((route) => ({
       url: `${siteUrl}${route}`,
-      lastModified: new Date()
+      lastModified: new Date(),
     })),
     ...vehicles.map((vehicle) => ({
       url: `${siteUrl}/vehicle/${vehicle.slug}`,
-      lastModified: new Date(vehicle.createdAt)
-    }))
+      lastModified: new Date(vehicle.createdAt),
+    })),
   ];
 }
