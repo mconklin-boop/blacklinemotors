@@ -3,7 +3,7 @@ import { vehicles } from "@/data/vehicles";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.blacklinemotorsco.com";
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://blacklinemotors.example";
   const routes = [
     "",
     "/vehicles",

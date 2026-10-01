@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { BrandLogo } from "./BrandLogo";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ArrowUpRight, Menu, X, MapPin } from "lucide-react";
@@ -31,12 +32,7 @@ export function Header() {
           aria-label="Blackline Motors home"
           onClick={() => setOpen(false)}
         >
-          <span className="brand-mark">
-            B<span>／</span>
-          </span>
-          <span>
-            BLACKLINE<small>M O T O R S</small>
-          </span>
+          <BrandLogo />
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           {links.map(([label, href]) => (

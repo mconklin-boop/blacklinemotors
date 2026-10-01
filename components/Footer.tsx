@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "./BrandLogo";
 import { ArrowUpRight } from "lucide-react";
 export function Footer() {
   return (
@@ -6,12 +7,7 @@ export function Footer() {
       <div className="footer-top wrap">
         <div>
           <Link href="/" className="brand">
-            <span className="brand-mark">
-              B<span>／</span>
-            </span>
-            <span>
-              BLACKLINE<small>M O T O R S</small>
-            </span>
+            <BrandLogo />
           </Link>
           <p>
             Good vehicles. Clear information.
