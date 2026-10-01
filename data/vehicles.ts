@@ -30,26 +30,23 @@ export const vehicles: Vehicle[] = [
     knownMechanicalIssues: "None reported in sample record.",
     partnerOwnedVehicle: false,
     featured: true,
-    photos: [
-      "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1600&q=80"
-    ],
+    photos: ["https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1600&q=80"],
     createdAt: "2026-06-28"
   },
   {
     id: "veh-002",
-    slug: "2019-toyota-4runner-trd-off-road",
+    slug: "2019-ford-explorer",
     transactionType: "For Sale",
     year: 2019,
-    make: "Toyota",
-    model: "4Runner",
-    trim: "TRD Off-Road",
+    make: "Ford",
+    model: "Explorer",
+    trim: "XLT 4WD",
     vin: "SAMPLEVIN0022345",
     mileage: 71640,
     exteriorColor: "Midnight Black",
     interiorColor: "Graphite",
-    engine: "4.0L V6",
-    transmission: "5-speed automatic",
+    engine: "3.5L V6",
+    transmission: "6-speed automatic",
     drivetrain: "4WD",
     fuelType: "Gasoline",
     price: 32750,
@@ -65,45 +62,39 @@ export const vehicles: Vehicle[] = [
     knownMechanicalIssues: "None reported in sample record.",
     partnerOwnedVehicle: false,
     featured: true,
-    photos: [
-      "https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80"
-    ],
+    photos: ["https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1600&q=80"],
     createdAt: "2026-06-20"
   },
   {
     id: "veh-003",
-    slug: "2017-chevrolet-silverado-2500hd-project",
+    slug: "2017-chevrolet-camaro-ss",
     transactionType: "For Sale",
     year: 2017,
     make: "Chevrolet",
-    model: "Silverado 2500HD",
-    trim: "Work Truck",
+    model: "Camaro",
+    trim: "SS Coupe",
     vin: "SAMPLEVIN0032345",
-    mileage: 129880,
+    mileage: 49880,
     exteriorColor: "Summit White",
     interiorColor: "Dark Ash",
-    engine: "6.0L V8",
+    engine: "6.2L V8",
     transmission: "6-speed automatic",
-    drivetrain: "4WD",
+    drivetrain: "RWD",
     fuelType: "Gasoline",
-    price: 18400,
-    titleType: "Rebuilt",
+    price: 28900,
+    titleType: "Clean",
     titleState: "CO",
-    category: "Three-quarter-ton pickup trucks",
+    category: "Performance car",
     location: "Denver, CO",
     availabilityStatus: "Available",
-    condition: "Sample data - rebuilt-title project vehicle",
-    description: "Sample heavy-duty truck positioned for buyers comfortable with rebuilt-title disclosures.",
-    knownDamage: "Prior front-end damage reflected in rebuilt title. Sample disclosure only.",
-    repairsCompleted: "Front clip repair and alignment listed in sample record.",
-    knownMechanicalIssues: "Air conditioning intermittent in sample record.",
+    condition: "Sample data - used vehicle",
+    description: "Illustrative performance coupe used to demonstrate the inventory shopping experience.",
+    knownDamage: "Sample record only; actual condition requires verification.",
+    repairsCompleted: "Sample service history for layout demonstration only.",
+    knownMechanicalIssues: "Not verified; design preview only.",
     partnerOwnedVehicle: false,
     featured: true,
-    photos: [
-      "https://images.unsplash.com/photo-1571867424488-4565932edb41?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1600&q=80"
-    ],
+    photos: ["https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80"],
     createdAt: "2026-06-16"
   },
   {
@@ -148,10 +139,7 @@ export const vehicles: Vehicle[] = [
     partnerOwnedVehicle: true,
     fleetProvider: "Commercial fleet partner placeholder",
     featured: true,
-    photos: [
-      "https://images.unsplash.com/photo-1591768793355-74d04bb6608f?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1600&q=80"
-    ],
+    photos: ["https://images.unsplash.com/photo-1591768793355-74d04bb6608f?auto=format&fit=crop&w=1600&q=80"],
     createdAt: "2026-06-25"
   },
   {
@@ -196,10 +184,7 @@ export const vehicles: Vehicle[] = [
     partnerOwnedVehicle: true,
     fleetProvider: "Rental partner placeholder",
     featured: true,
-    photos: [
-      "https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80"
-    ],
+    photos: ["https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe?auto=format&fit=crop&w=1600&q=80"],
     createdAt: "2026-06-18"
   },
   {
@@ -244,10 +229,7 @@ export const vehicles: Vehicle[] = [
     partnerOwnedVehicle: true,
     fleetProvider: "Fleet provider placeholder",
     featured: true,
-    photos: [
-      "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=1600&q=80"
-    ],
+    photos: ["https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1600&q=80"],
     createdAt: "2026-06-10"
   }
 ];
@@ -267,3 +249,4 @@ export function getSimilarVehicles(vehicle: Vehicle) {
     .filter((candidate) => candidate.id !== vehicle.id && candidate.transactionType === vehicle.transactionType)
     .slice(0, 3);
 }
+
