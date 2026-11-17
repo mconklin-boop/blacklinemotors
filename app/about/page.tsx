@@ -6,7 +6,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Blackline Motors is owned by a master diesel mechanic in Aurora, Colorado. Every rent-to-own vehicle is inspected and reconditioned before it is offered.",
+    "Blackline Motors is owned by a master mechanic in Aurora, Colorado. Every rent-to-own vehicle is inspected and reconditioned before it is offered.",
 };
 
 export default function AboutPage() {
@@ -14,7 +14,7 @@ export default function AboutPage() {
     <Section eyebrow="About Blackline Motors" title="A mechanic-owned dealership">
       <div className="max-w-3xl space-y-6 text-lg leading-8 text-gray-600">
         <p>
-          Blackline Motors is owned and run by Mike Conklin, a master diesel
+          Blackline Motors is owned and run by Mike Conklin, a master
           mechanic who has spent more than two decades working in truck and
           equipment shops around Denver.
         </p>
