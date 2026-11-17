@@ -2,28 +2,38 @@ import type { Metadata } from "next";
 import { Field } from "@/components/forms/Field";
 import { ValidatedForm } from "@/components/forms/ValidatedForm";
 import { Section } from "@/components/Section";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact Blackline Motors for vehicle sales, commercial leasing, appointments, and partnership inquiries.",
+    "Call, text or message Blackline Motors about rent-to-own, selling your vehicle, or finding a specific vehicle. Serving Aurora and east Denver.",
 };
 
 export default function ContactPage() {
   return (
-    <Section eyebrow="Contact" title="Talk with Blackline Motors">
+    <Section eyebrow="Contact" title="Talk with Mike">
       <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[
-          "Based in Denver, Colorado",
-          "Vehicle sales and sourcing",
-          "Inspection appointments arranged individually",
-          "Online inquiries: setup in progress",
-        ].map((item) => (
+          ["Call", site.phoneDisplay, site.phoneHref],
+          ["Text", site.phoneDisplay, site.smsHref],
+          ["Email", site.email, `mailto:${site.email}`],
+          ["Area", `Serving ${site.serviceArea}`, ""],
+        ].map(([label, value, href]) => (
           <div
-            key={item}
+            key={label}
             className="rounded-md border border-gray-200 bg-white p-5 text-gray-600"
           >
-            {item}
+            <span className="block text-xs font-bold uppercase tracking-widest text-gray-400">
+              {label}
+            </span>
+            {href ? (
+              <a href={href} className="font-semibold text-blackline-black underline">
+                {value}
+              </a>
+            ) : (
+              <span className="font-semibold text-blackline-black">{value}</span>
+            )}
           </div>
         ))}
       </div>
@@ -35,10 +45,10 @@ export default function ContactPage() {
           label="Appointment Request Option"
           name="appointmentRequest"
           options={[
+            "Rent-to-own question",
+            "Selling my vehicle",
+            "Finding a specific vehicle",
             "General question",
-            "Vehicle inspection",
-            "Commercial lease consultation",
-            "Partnership call",
           ]}
         />
         <Field label="Message" name="message" required textarea />

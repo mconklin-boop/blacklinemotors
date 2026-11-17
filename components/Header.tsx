@@ -3,27 +3,33 @@ import Link from "next/link";
 import { BrandLogo } from "./BrandLogo";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ArrowUpRight, Menu, X, MapPin } from "lucide-react";
+import { ArrowUpRight, Menu, X, MapPin, Phone, MessageSquare } from "lucide-react";
+import { site } from "@/lib/site";
+
 const links = [
-  ["Inventory", "/vehicles"],
-  ["Sell / trade", "/sell-your-vehicle"],
-  ["Find my vehicle", "/request-vehicle"],
-  ["Financing", "/financing"],
-  ["About us", "/about"],
+  ["Rent-to-own", "/rent-to-own"],
+  ["How it works", "/rent-to-own#how-it-works"],
+  ["Requirements", "/rent-to-own#requirements"],
+  ["Referrals", "/referrals"],
+  ["Sell your vehicle", "/sell-your-vehicle"],
+  ["Español", "/es/rent-to-own"],
 ];
+
 export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const spanish = pathname.startsWith("/es");
+  const prequalHref = spanish ? "/es/rent-to-own#prequal" : "/rent-to-own#prequal";
   return (
     <header className="site-header">
       <div className="utility-bar">
         <span>
-          <MapPin size={12} /> Denver, Colorado
+          <MapPin size={12} /> Serving {site.serviceArea}
         </span>
-        <span>Independent. Driven by you.</span>
-        <Link href="/contact">
-          Contact our team <ArrowUpRight size={12} />
-        </Link>
+        <span>Rent-to-own available. Flexible payments. Ask for details.</span>
+        <a href={site.phoneHref}>
+          <Phone size={12} /> {site.phoneDisplay}
+        </a>
       </div>
       <div className="nav-shell">
         <Link
@@ -40,13 +46,17 @@ export function Header() {
               className={pathname === href ? "active" : ""}
               href={href}
               key={href}
+              hrefLang={href.startsWith("/es") ? "es" : undefined}
             >
               {label}
             </Link>
           ))}
         </nav>
-        <Link className="nav-shop" href="/vehicles">
-          Shop inventory <ArrowUpRight size={16} />
+        <a className="nav-call" href={site.phoneHref}>
+          <Phone size={15} /> {site.phoneDisplay}
+        </a>
+        <Link className="nav-shop" href={prequalHref}>
+          {spanish ? "Precalifique" : "Get pre-qualified"} <ArrowUpRight size={16} />
         </Link>
         <button
           className="menu-toggle"
@@ -71,11 +81,20 @@ export function Header() {
             </Link>
           ))}
           <Link href="/contact" onClick={() => setOpen(false)}>
-            Contact us
+            Contact
             <ArrowUpRight size={17} />
           </Link>
         </nav>
       )}
+      <div className="mobile-call-bar">
+        <a href={site.phoneHref}>
+          <Phone size={16} /> {spanish ? "Llamar" : "Call"}
+        </a>
+        <a href={site.smsHref}>
+          <MessageSquare size={16} /> {spanish ? "Texto" : "Text"}
+        </a>
+        <Link href={prequalHref}>{spanish ? "Precalifique" : "Pre-qualify"}</Link>
+      </div>
     </header>
   );
 }

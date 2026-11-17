@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { BrandLogo } from "./BrandLogo";
 import { ArrowUpRight } from "lucide-react";
+import { rtoDisclaimer, site } from "@/lib/site";
+
 export function Footer() {
   return (
     <footer className="site-footer">
@@ -10,47 +12,52 @@ export function Footer() {
             <BrandLogo />
           </Link>
           <p>
-            Good vehicles. Clear information.
+            Reliable vehicles, inspected by a master mechanic.
             <br />
-            Your next chapter starts here.
+            Rent-to-own available. Flexible payments. Ask for details.
           </p>
-          <span className="footer-location">Denver, Colorado</span>
+          <span className="footer-location">Serving {site.serviceArea}</span>
         </div>
         <div>
-          <h3>Find your drive</h3>
-          <Link href="/vehicles">Shop inventory</Link>
-          <Link href="/request-vehicle">Vehicle sourcing</Link>
-          <Link href="/lease">Commercial vehicles</Link>
+          <h3>Rent-to-own</h3>
+          <Link href="/rent-to-own">Rent-to-own program</Link>
+          <Link href="/rent-to-own#requirements">Requirements</Link>
+          <Link href="/rent-to-own#faq">FAQ</Link>
+          <Link href="/es/rent-to-own" hrefLang="es">
+            En español
+          </Link>
         </div>
         <div>
-          <h3>Shopping tools</h3>
-          <Link href="/sell-your-vehicle">Sell or trade your vehicle</Link>
-          <Link href="/financing">Explore financing</Link>
+          <h3>More</h3>
+          <Link href="/referrals">Referral reward</Link>
+          <Link href="/sell-your-vehicle">Sell your vehicle</Link>
+          <Link href="/request-vehicle">Request a vehicle</Link>
           <Link href="/about">About Blackline</Link>
         </div>
         <div>
-          <h3>Let’s talk vehicles</h3>
+          <h3>Talk to Mike</h3>
           <p>
-            Have something in mind?
+            <a href={site.phoneHref}>Call {site.phoneDisplay}</a>
             <br />
-            We’d like to hear about it.
+            <a href={site.smsHref}>Text {site.phoneDisplay}</a>
+            <br />
+            <a href={`mailto:${site.email}`}>{site.email}</a>
           </p>
           <Link className="footer-contact" href="/contact">
-            Get in touch <ArrowUpRight size={18} />
+            Send a message <ArrowUpRight size={18} />
           </Link>
-          <Link href="/partnerships">Partner with us</Link>
         </div>
       </div>
       <div className="footer-bottom wrap">
-        <span>© {new Date().getFullYear()} Blackline Motors</span>
+        <span>
+          © {new Date().getFullYear()} {site.legalName}
+        </span>
         <div>
           <Link href="/privacy-policy">Privacy</Link>
           <Link href="/terms-of-use">Terms</Link>
         </div>
       </div>
-      <p className="footer-disclaimer wrap">
-        Vehicle availability, pricing, condition, title, and financing are subject to verification. Coming-soon vehicles are not ready for purchase. Review each listing’s condition disclosures and photograph notes.
-      </p>
+      <p className="footer-disclaimer wrap">{rtoDisclaimer.en}</p>
     </footer>
   );
 }

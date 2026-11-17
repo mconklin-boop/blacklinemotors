@@ -1,34 +1,41 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Section } from "@/components/Section";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about Blackline Motors and its focus on specialty vehicles, commercial trucks, transparent disclosures, and automotive partnerships.",
+    "Blackline Motors is owned by a master diesel mechanic in Aurora, Colorado. Every rent-to-own vehicle is inspected and reconditioned before it is offered.",
 };
 
 export default function AboutPage() {
   return (
-    <Section
-      eyebrow="About Blackline Motors"
-      title="Specialty and commercial vehicle access"
-    >
-      <div className="max-w-4xl space-y-6 text-lg leading-8 text-gray-600">
+    <Section eyebrow="About Blackline Motors" title="A mechanic-owned dealership">
+      <div className="max-w-3xl space-y-6 text-lg leading-8 text-gray-600">
         <p>
-          Blackline Motors is being built as a modern automotive dealership and
-          commercial vehicle platform focused on specialty vehicles,
-          auction-sourced opportunities, commercial trucks, and work vehicles.
+          Blackline Motors is owned and run by Mike Conklin, a master diesel
+          mechanic who has spent more than two decades working in truck and
+          equipment shops around Denver.
         </p>
         <p>
-          The business emphasizes transparent vehicle disclosures, flexible
-          acquisition options, and practical support for buyers, businesses,
-          dealers, fleet operators, and automotive partners.
+          That background shapes how we do business. We find vehicles, inspect
+          them ourselves, and recondition them before they are offered to anyone.
+          In the rent-to-own program we only use vehicles with clean titles.
         </p>
         <p>
-          Available inventory may include used vehicles, rebuilt-title
-          opportunities, project vehicles, commercial trucks, rental-ready
-          vehicles, and vehicle requests sourced through approved channels and
-          partners.
+          We serve {site.serviceArea}. Have a question? Call or text Mike at{" "}
+          <a className="font-semibold text-blackline-black underline" href={site.phoneHref}>
+            {site.phoneDisplay}
+          </a>
+          , or{" "}
+          <Link className="font-semibold text-blackline-black underline" href="/rent-to-own#prequal">
+            see if you pre-qualify for rent-to-own
+          </Link>
+          .
+        </p>
+        <p className="text-sm text-gray-500">
+          Blackline Motors is a DBA of Conklin Investments, Inc.
         </p>
       </div>
     </Section>

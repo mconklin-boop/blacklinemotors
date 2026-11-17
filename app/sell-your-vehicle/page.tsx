@@ -6,16 +6,16 @@ import { Section } from "@/components/Section";
 export const metadata: Metadata = {
   title: "Sell Your Vehicle",
   description:
-    "Submit a vehicle for sale, trade-in, consignment, or fleet acquisition review.",
+    "Sell your car, truck, diesel or work vehicle to Blackline Motors in Aurora, CO, including vehicles that need work.",
 };
 
 export default function SellYourVehiclePage() {
   return (
-    <Section eyebrow="Vehicle acquisition" title="Sell Your Vehicle">
+    <Section eyebrow="We buy vehicles" title="Sell Your Vehicle">
       <p className="mb-8 max-w-3xl text-gray-600">
-        Blackline Motors considers clean-title vehicles, damaged vehicles,
-        project cars, trade-ins, fleet vehicles, and specialty inventory. Photo
-        upload integration is a first-version placeholder.
+        Blackline Motors buys cars, trucks, diesels and work vehicles, including
+        ones that need mechanical work. Tell us about yours and Mike will follow
+        up. Prefer to talk? Call or text 720-614-8248.
       </p>
       <ValidatedForm action="/api/sell-vehicle" submitLabel="Submit Vehicle">
         <Field label="Seller Name" name="sellerName" required />
