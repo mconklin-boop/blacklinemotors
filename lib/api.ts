@@ -36,7 +36,7 @@ export async function handleFormSubmission(
         ok: false,
         message:
           messages.failure ??
-          `We couldn't send your message online right now. Please call or text Mike at ${site.phoneDisplay}.`,
+          `We couldn't send your message online right now. Please call or text us at ${site.phoneDisplay}.`,
       },
       { status: 503 },
     );
@@ -46,6 +46,6 @@ export async function handleFormSubmission(
     ok: true,
     message:
       messages.success ??
-      "Thanks! Your message was received. Mike will be in touch soon.",
+      "Thanks! Your message was received. We'll be in touch soon.",
   });
 }

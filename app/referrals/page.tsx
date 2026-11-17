@@ -23,8 +23,8 @@ export default function ReferralsPage() {
           send you $100.
         </p>
         <ol className="rto-numbered">
-          <li>Share this website or Mike&apos;s number: {site.phoneDisplay}.</li>
-          <li>Have them mention your name when they apply or when Mike calls.</li>
+          <li>Share this website or our number: {site.phoneDisplay}.</li>
+          <li>Have them mention your name when they apply or when we call.</li>
           <li>After their first three on-time payments, you get $100.</li>
         </ol>
         <div className="hero-actions">

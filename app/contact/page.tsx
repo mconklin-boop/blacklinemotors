@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <Section eyebrow="Contact" title="Talk with Mike">
+    <Section eyebrow="Contact" title="Talk with Blackline Motors">
       <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[
           ["Call", site.phoneDisplay, site.phoneHref],

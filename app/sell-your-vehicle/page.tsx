@@ -14,7 +14,7 @@ export default function SellYourVehiclePage() {
     <Section eyebrow="We buy vehicles" title="Sell Your Vehicle">
       <p className="mb-8 max-w-3xl text-gray-600">
         Blackline Motors buys cars, trucks, diesels and work vehicles, including
-        ones that need mechanical work. Tell us about yours and Mike will follow
+        ones that need mechanical work. Tell us about yours and we&apos;ll follow
         up. Prefer to talk? Call or text 720-614-8248.
       </p>
       <ValidatedForm action="/api/sell-vehicle" submitLabel="Submit Vehicle">

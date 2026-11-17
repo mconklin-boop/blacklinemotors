@@ -28,7 +28,7 @@ const copy = {
     switchHref: "/es/rent-to-own",
     formAsideTitle: "What happens next",
     formAside: [
-      "Mike reviews your info and reaches out, usually within 1 hour during the day.",
+      "We review your info and reach out, usually within 1 hour during the day.",
       "A quick call to talk about what you need and what fits your budget.",
       "Bring your documents in person to finish your application.",
     ],
@@ -43,7 +43,7 @@ const copy = {
     whyEyebrow: "Why Blackline",
     whyTitle: "The mechanic is the owner.",
     why: [
-      { title: "Master-mechanic inspected", text: "Mike is a master mechanic with 20+ years in the shop. Every vehicle gets checked by him, not a salesperson." },
+      { title: "Master-mechanic inspected", text: "Blackline is owned by a master mechanic with 20+ years in the shop. Every vehicle is checked by the owner, not a salesperson." },
       { title: "Clean titles only", text: "No salvage or rebuilt titles in the rent-to-own program." },
       { title: "Maintenance support", text: "Scheduled maintenance through our partner shop, Iron Ridge Service, helps keep your vehicle running." },
       { title: "Straight answers", text: "Every cost and condition is in writing before you sign. Ask anything." },
@@ -75,7 +75,7 @@ const copy = {
       { q: "Can I send my documents online?", a: "Please don't send your ID or pay stubs through Facebook or text. We collect documents in person or through a secure upload link." },
     ],
     bottomTitle: "Ready to see if you qualify?",
-    bottomText: "Two minutes online, or call or text Mike directly.",
+    bottomText: "Two minutes online, or call or text us directly.",
   },
   es: {
     eyebrow: "Renta con opción a compra en Aurora y el este de Denver",
@@ -88,7 +88,7 @@ const copy = {
     switchHref: "/rent-to-own",
     formAsideTitle: "Qué sigue",
     formAside: [
-      "Mike revisa su información y se comunica con usted, normalmente en menos de 1 hora durante el día.",
+      "Revisamos su información y nos comunicamos con usted, normalmente en menos de 1 hora durante el día.",
       "Una llamada corta para hablar de lo que necesita y lo que cabe en su presupuesto.",
       "Traiga sus documentos en persona para completar su solicitud.",
     ],
@@ -103,7 +103,7 @@ const copy = {
     whyEyebrow: "Por qué Blackline",
     whyTitle: "El mecánico es el dueño.",
     why: [
-      { title: "Inspeccionado por un mecánico experto", text: "Mike es mecánico maestro con más de 20 años de experiencia. Él revisa cada vehículo personalmente." },
+      { title: "Inspeccionado por un mecánico experto", text: "Blackline es de un mecánico maestro con más de 20 años de experiencia. El dueño revisa cada vehículo personalmente." },
       { title: "Solo títulos limpios", text: "No usamos títulos de salvamento ni reconstruidos en el programa." },
       { title: "Apoyo de mantenimiento", text: "Mantenimiento programado a través de nuestro taller asociado, Iron Ridge Service." },
       { title: "Respuestas claras", text: "Todos los costos y condiciones se entregan por escrito antes de firmar." },
@@ -135,7 +135,7 @@ const copy = {
       { q: "¿Puedo enviar mis documentos en línea?", a: "Por favor no envíe su identificación ni talones de pago por Facebook o mensaje de texto. Recibimos documentos en persona o por un enlace seguro." },
     ],
     bottomTitle: "¿Listo para ver si califica?",
-    bottomText: "Dos minutos en línea, o llame o escriba a Mike directamente.",
+    bottomText: "Dos minutos en línea, o llámenos o escríbanos directamente.",
   },
 };
 

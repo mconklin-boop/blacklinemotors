@@ -35,7 +35,7 @@ export function Footer() {
           <Link href="/about">About Blackline</Link>
         </div>
         <div>
-          <h3>Talk to Mike</h3>
+          <h3>Talk to us</h3>
           <p>
             <a href={site.phoneHref}>Call {site.phoneDisplay}</a>
             <br />

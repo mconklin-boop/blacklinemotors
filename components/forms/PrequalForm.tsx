@@ -24,8 +24,8 @@ const copy = {
     privacy: "Never send your ID, pay stubs or bank info through Facebook or text. We collect documents in person or by secure upload.",
     submit: "Check if I pre-qualify",
     sending: "Sending...",
-    callNow: "Call Mike",
-    textNow: "Text Mike",
+    callNow: "Call us",
+    textNow: "Text us",
   },
   es: {
     title: "Precalifique",
@@ -44,8 +44,8 @@ const copy = {
     privacy: "Nunca envíe su identificación, talones de pago ni datos bancarios por Facebook o mensaje de texto. Recibimos documentos en persona o por un enlace seguro.",
     submit: "Ver si precalifico",
     sending: "Enviando...",
-    callNow: "Llamar a Mike",
-    textNow: "Mensaje a Mike",
+    callNow: "Llámenos",
+    textNow: "Envíenos un texto",
   },
 } as const;
 
