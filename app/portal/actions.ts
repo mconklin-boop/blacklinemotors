@@ -251,7 +251,9 @@ export async function requestPayoff() {
     : s;
   const purchase = current.earlyPurchaseCents ?? 0;
   const total = purchase + (behind ? s.amountDueNowCents : 0);
-  const goodThrough = s.nextInstallment ? prettyDate(s.nextInstallment.dueDate) : prettyDate(today);
+  // Good until the next payment date that hasn't arrived yet.
+  const upcoming = s.schedule.find((i) => i.dueDate > today);
+  const goodThrough = prettyDate(upcoming ? upcoming.dueDate : today);
   const vehicle = vehicleName(a);
 
   const lines = [
