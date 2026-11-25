@@ -453,7 +453,7 @@ export default async function AdminCustomerPage({
           <input type="hidden" name="customer_id" value={id} />
           <input type="hidden" name="email" value={customer.email} />
           <SubmitButton variant="secondary" pendingText="Sending…">Send password link</SubmitButton>
-          <span className="text-gray-600">Use if the invite expired or they forgot their password.</span>
+          <span className="text-gray-600">Emails the customer a link to set their password. Use it for the first invite, an expired link, or a forgotten password.</span>
         </form>
         <p className="mt-3 text-xs text-gray-500">
           Stripe customer: {customer.stripe_customer_id ?? "not created yet (made on first online payment)"} ·{" "}

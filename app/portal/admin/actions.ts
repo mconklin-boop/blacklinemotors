@@ -32,11 +32,20 @@ export async function inviteCustomer(formData: FormData) {
   if (!full_name || !z.string().email().safeParse(email).success) {
     redirect(`/portal/admin?error=${q("Enter the customer's full name and a valid email.")}`);
   }
+  const sendNow = str(formData, "send_invite") === "on";
   const db = adminClient();
-  const { data, error } = await db.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${await baseUrl()}/portal/set-password`,
-    data: { full_name },
-  });
+  // Either email the invite now, or create the login quietly so the account
+  // can be set up first; "Send password link" emails the customer later.
+  const { data, error } = sendNow
+    ? await db.auth.admin.inviteUserByEmail(email, {
+        redirectTo: `${await baseUrl()}/portal/set-password`,
+        data: { full_name },
+      })
+    : await db.auth.admin.createUser({
+        email,
+        email_confirm: true,
+        user_metadata: { full_name },
+      });
   if (error || !data.user) {
     redirect(
       `/portal/admin?error=${q(`Invite failed: ${error?.message ?? "unknown error"}. If this email already has a login, open the customer and use "Send password link".`)}`,
@@ -48,7 +57,13 @@ export async function inviteCustomer(formData: FormData) {
   if (insertError) {
     redirect(`/portal/admin?error=${q(`Login created but the customer record failed: ${insertError.message}`)}`);
   }
-  back(data.user.id, "ok", `Invite emailed to ${email}. They'll set their password from the link.`);
+  back(
+    data.user.id,
+    "ok",
+    sendNow
+      ? `Invite emailed to ${email}. They'll set their password from the link.`
+      : `Account created for ${email}. No email was sent. Use "Send password link" when you're ready.`,
+  );
 }
 
 export async function sendPasswordLink(formData: FormData) {

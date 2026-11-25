@@ -111,8 +111,8 @@ export default async function AdminHome({
 
       <Card title="Invite a customer">
         <p className="mb-4 text-sm text-gray-600">
-          Creates their portal login and emails them a link to set a password. Add their agreement
-          on the next screen.
+          Creates their portal login. Add their agreement on the next screen. When you&apos;re ready,
+          use &quot;Send password link&quot; on their page to email them a link to set a password.
         </p>
         <form action={inviteCustomer} className="grid gap-4 sm:grid-cols-3">
           <Label text="Full name">
@@ -124,8 +124,14 @@ export default async function AdminHome({
           <Label text="Phone">
             <input name="phone" type="tel" className={inputClass} />
           </Label>
+          <label className="flex items-center gap-2 text-sm font-bold sm:col-span-3">
+            <input type="checkbox" name="send_invite" /> Email the invite now
+            <span className="font-normal text-gray-500">
+              (leave unchecked to set up the account first and send it later)
+            </span>
+          </label>
           <div className="sm:col-span-3">
-            <SubmitButton pendingText="Sending invite…">Create login and send invite</SubmitButton>
+            <SubmitButton pendingText="Creating…">Create customer</SubmitButton>
           </div>
         </form>
       </Card>
