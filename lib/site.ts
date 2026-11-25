@@ -3,7 +3,7 @@
 
 export const site = {
   name: "Blackline Motors",
-  legalName: "Conklin Investments, Inc. DBA Blackline Motors",
+  legalName: "Blackline Motors LLC",
   phoneDisplay: "720-614-8248",
   phoneHref: "tel:+17206148248",
   smsHref: "sms:+17206148248",

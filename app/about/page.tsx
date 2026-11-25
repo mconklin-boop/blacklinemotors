@@ -34,7 +34,7 @@ export default function AboutPage() {
           .
         </p>
         <p className="text-sm text-gray-500">
-          Blackline Motors is a DBA of Conklin Investments, Inc.
+          Blackline Motors LLC, Denver, Colorado.
         </p>
       </div>
     </Section>
