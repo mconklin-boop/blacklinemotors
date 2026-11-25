@@ -17,14 +17,16 @@ export default async function AdminHome({
   const params = await searchParams;
   await requireAdmin();
   const db = adminClient();
-  const [c, a, p, f, m, i] = await Promise.all([
+  const [c, a, p, f, m, i, l] = await Promise.all([
     db.from("customers").select("*").order("created_at", { ascending: false }),
     db.from("agreements").select("*"),
     db.from("payments").select("*"),
     db.from("fees").select("*"),
     db.from("messages").select("customer_id").eq("sender", "customer").eq("read_by_admin", false),
     db.from("insurance_policies").select("customer_id").eq("status", "submitted"),
+    db.from("leads").select("id", { count: "exact", head: true }).eq("status", "new"),
   ]);
+  const newLeads = l.count ?? 0;
   const customers = (c.data ?? []) as Customer[];
   const agreements = (a.data ?? []) as Agreement[];
   const payments = (p.data ?? []) as Payment[];
@@ -61,6 +63,14 @@ export default async function AdminHome({
         </Notice>
       )}
       {!portalEnabled() && <Notice tone="error">Supabase isn&apos;t connected.</Notice>}
+      {newLeads > 0 && (
+        <Notice tone="warning">
+          {newLeads} new website {newLeads === 1 ? "lead" : "leads"} waiting.{" "}
+          <Link href="/portal/admin/leads?status=new" className="font-bold underline">
+            Open leads
+          </Link>
+        </Notice>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>

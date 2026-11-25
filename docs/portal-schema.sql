@@ -138,3 +138,22 @@ alter table public.messages enable row level security;
 insert into storage.buckets (id, name, public, file_size_limit)
 values ('portal', 'portal', false, 26214400)
 on conflict (id) do nothing;
+
+-- Website leads (pre-qualification, contact, sell-your-vehicle, request forms).
+create table if not exists public.leads (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  form text not null,
+  status text not null default 'new'
+    check (status in ('new', 'contacted', 'qualified', 'applied', 'won', 'lost')),
+  name text,
+  phone text,
+  email text,
+  fields jsonb not null default '{}'::jsonb,
+  page text,
+  notes text,
+  alert_sent boolean not null default false,
+  contacted_at timestamptz
+);
+create index if not exists leads_created_idx on public.leads (created_at desc);
+alter table public.leads enable row level security;
