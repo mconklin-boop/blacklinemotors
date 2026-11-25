@@ -53,6 +53,31 @@ export default async function AdminHome({
 
   const totalDue = rows.reduce((s, r) => s + (r.summary?.amountDueNowCents ?? 0), 0);
 
+  // Search by agreement number, name, phone or email. Nothing is listed until
+  // you search, except the "needs attention" shortcut.
+  const term = (typeof params.q === "string" ? params.q : "").trim();
+  const showAttention = params.show === "attention";
+  const needsAttention = (r: (typeof rows)[number]) =>
+    (r.summary?.amountDueNowCents ?? 0) > 0 ||
+    (unread.get(r.cust.id) ?? 0) > 0 ||
+    insurancePending.has(r.cust.id);
+  const attentionCount = rows.filter(needsAttention).length;
+  const lower = term.toLowerCase();
+  const digits = term.replace(/\D/g, "");
+  const matches = showAttention
+    ? rows.filter(needsAttention)
+    : term
+      ? rows.filter(({ cust }) => {
+          const ags = agreements.filter((x) => x.customer_id === cust.id);
+          return (
+            cust.full_name.toLowerCase().includes(lower) ||
+            cust.email.toLowerCase().includes(lower) ||
+            (digits.length >= 3 && (cust.phone ?? "").replace(/\D/g, "").includes(digits)) ||
+            ags.some((x) => x.agreement_number.toLowerCase().includes(lower) || (x.vin ?? "").toLowerCase().includes(lower))
+          );
+        })
+      : [];
+
   return (
     <AdminShell title="Rent-to-own customers">
       <Flash params={params} />
@@ -88,34 +113,68 @@ export default async function AdminHome({
       </div>
 
       <Card title="Customers">
-        {rows.length === 0 ? (
-          <p className="text-sm text-gray-600">No customers yet. Invite your first one below.</p>
-        ) : (
-          <Table head={["Customer", "Vehicle", "Status", "Due now", "Next due", "Flags"]}>
-            {rows.map(({ cust, ag, summary }) => (
-              <tr key={cust.id}>
-                <td className="px-2 py-2">
-                  <Link href={`/portal/admin/customers/${cust.id}`} className="font-semibold underline">
-                    {cust.full_name}
-                  </Link>
-                  <span className="block text-xs text-gray-500">{cust.email}</span>
-                </td>
-                <td className="px-2 py-2">{ag ? vehicleName(ag) : "—"}</td>
-                <td className="px-2 py-2">{ag ? <Badge>{ag.status}</Badge> : <Badge tone="warn">no agreement</Badge>}</td>
-                <td className={`px-2 py-2 font-semibold ${summary && summary.amountDueNowCents > 0 ? "text-blackline-red" : ""}`}>
-                  {summary ? money(summary.amountDueNowCents) : "—"}
-                  {summary && summary.daysLate > 0 && (
-                    <span className="block text-xs">{summary.daysLate} days late</span>
-                  )}
-                </td>
-                <td className="px-2 py-2">{summary?.nextInstallment ? prettyDate(summary.nextInstallment.dueDate) : "—"}</td>
-                <td className="space-x-1 px-2 py-2">
-                  {(unread.get(cust.id) ?? 0) > 0 && <Badge tone="alert">{unread.get(cust.id)} msg</Badge>}
-                  {insurancePending.has(cust.id) && <Badge tone="warn">insurance</Badge>}
-                </td>
-              </tr>
-            ))}
-          </Table>
+        <form method="get" className="flex flex-wrap gap-2">
+          <input
+            name="q"
+            type="search"
+            defaultValue={term}
+            placeholder="Search by agreement #, name, phone or email"
+            className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-3 py-2.5 text-blackline-black outline-none focus:border-blackline-red"
+          />
+          <button className="rounded-md bg-blackline-red px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white hover:bg-red-700">
+            Search
+          </button>
+        </form>
+        <p className="mt-3 text-sm text-gray-600">
+          {attentionCount > 0 ? (
+            <Link href="/portal/admin?show=attention" className="font-semibold text-blackline-red underline">
+              {attentionCount} {attentionCount === 1 ? "customer needs" : "customers need"} attention
+            </Link>
+          ) : (
+            "No customers need attention right now."
+          )}
+          {(term || showAttention) && (
+            <>
+              {" · "}
+              <Link href="/portal/admin" className="underline">Clear</Link>
+            </>
+          )}
+        </p>
+
+        {(term || showAttention) && (
+          <div className="mt-4">
+            {matches.length === 0 ? (
+              <p className="text-sm text-gray-600">No customers match &quot;{term}&quot;.</p>
+            ) : (
+              <Table head={["Customer", "Agreement", "Vehicle", "Status", "Due now", "Next due", "Flags"]}>
+                {matches.map(({ cust, ag, summary }) => (
+                  <tr key={cust.id}>
+                    <td className="px-2 py-2">
+                      <Link href={`/portal/admin/customers/${cust.id}`} className="font-semibold underline">
+                        {cust.full_name}
+                      </Link>
+                      <span className="block text-xs text-gray-500">{cust.email}</span>
+                      {cust.phone && <span className="block text-xs text-gray-500">{cust.phone}</span>}
+                    </td>
+                    <td className="px-2 py-2">{ag?.agreement_number ?? "—"}</td>
+                    <td className="px-2 py-2">{ag ? vehicleName(ag) : "—"}</td>
+                    <td className="px-2 py-2">{ag ? <Badge>{ag.status}</Badge> : <Badge tone="warn">no agreement</Badge>}</td>
+                    <td className={`px-2 py-2 font-semibold ${summary && summary.amountDueNowCents > 0 ? "text-blackline-red" : ""}`}>
+                      {summary ? money(summary.amountDueNowCents) : "—"}
+                      {summary && summary.daysLate > 0 && (
+                        <span className="block text-xs">{summary.daysLate} days late</span>
+                      )}
+                    </td>
+                    <td className="px-2 py-2">{summary?.nextInstallment ? prettyDate(summary.nextInstallment.dueDate) : "—"}</td>
+                    <td className="space-x-1 px-2 py-2">
+                      {(unread.get(cust.id) ?? 0) > 0 && <Badge tone="alert">{unread.get(cust.id)} msg</Badge>}
+                      {insurancePending.has(cust.id) && <Badge tone="warn">insurance</Badge>}
+                    </td>
+                  </tr>
+                ))}
+              </Table>
+            )}
+          </div>
         )}
       </Card>
 
