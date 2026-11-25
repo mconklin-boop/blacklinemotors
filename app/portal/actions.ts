@@ -11,7 +11,9 @@ import {
   setSessionCookies,
 } from "@/lib/portal/session";
 import { loadAgreements, primaryAgreement } from "@/lib/portal/data";
-import { toCents } from "@/lib/portal/account";
+import { denverToday, money, prettyDate, summarize, toCents, vehicleName } from "@/lib/portal/account";
+import { sendMail } from "@/lib/mailer";
+import { site } from "@/lib/site";
 import { createAchCheckout, createStripeCustomer } from "@/lib/portal/stripe";
 
 function q(message: string) {
@@ -207,4 +209,103 @@ export async function startPayment(formData: FormData) {
     redirect(`/portal/payments?error=${q("We couldn't start the bank payment. Please try again or call us.")}`);
   }
   redirect(checkoutUrl);
+}
+
+// ---------- early payoff request ----------
+
+export async function requestPayoff() {
+  const { customer } = await requireCustomer();
+  if (!customer) redirect("/portal");
+  const account = primaryAgreement(await loadAgreements(customer.id));
+  if (!account || account.agreement.status !== "active" || !account.agreement.cash_price_cents) {
+    redirect(`/portal?error=${q("Early payoff isn't available on this account. Please call us.")}`);
+  }
+  const { agreement: a, summary: s, payments, fees } = account;
+  const today = denverToday();
+
+  // If the account is behind, show the price after bringing it current:
+  // re-run the numbers as if the amount due now had been paid.
+  const behind = s.amountDueNowCents > 0;
+  const current = behind
+    ? summarize(
+        a,
+        [
+          ...payments,
+          {
+            id: "quote",
+            agreement_id: a.id,
+            amount_cents: s.amountDueNowCents,
+            paid_on: today,
+            method: "other",
+            status: "succeeded",
+            reference: null,
+            stripe_session_id: null,
+            stripe_payment_intent: null,
+            note: null,
+            created_at: today,
+          },
+        ],
+        fees,
+        today,
+      )
+    : s;
+  const purchase = current.earlyPurchaseCents ?? 0;
+  const total = purchase + (behind ? s.amountDueNowCents : 0);
+  const goodThrough = s.nextInstallment ? prettyDate(s.nextInstallment.dueDate) : prettyDate(today);
+  const vehicle = vehicleName(a);
+
+  const lines = [
+    `Hi ${customer.full_name.split(" ")[0]},`,
+    "",
+    `Here is your early purchase quote for the ${vehicle}${a.vin ? ` (VIN ${a.vin})` : ""}, agreement ${a.agreement_number}.`,
+    "",
+    ...(behind
+      ? [
+          `Past-due amount to bring your account current: ${money(s.amountDueNowCents)} (includes ${money(s.feesOpenCents)} in fees)`,
+          `Early purchase price once current: ${money(purchase)}`,
+          `Total to own the vehicle today: ${money(total)}`,
+        ]
+      : [`Early purchase price: ${money(purchase)}`]),
+    "",
+    `This quote is good through ${goodThrough}, before your next scheduled payment. Your payments made so far: ${current.paymentsCompleted} of ${a.term_payments}.`,
+    "",
+    "How it's figured (from your agreement): the lower of the cash price minus a credit for part of the rental payments you've made, or the rental payments you have left. Care Plan charges aren't part of it.",
+    "",
+    "Reply to this email or call/text " + site.phoneDisplay + " to set up your payoff. We'll confirm the final amount and the title transfer steps with you before you pay.",
+    "",
+    "Blackline Motors LLC",
+    site.accountsEmail,
+  ];
+  const text = lines.join("\n");
+
+  const db = adminClient();
+  await db.from("messages").insert([
+    { customer_id: customer.id, sender: "customer", body: "[Automatic] Requested an early payoff quote." },
+    {
+      customer_id: customer.id,
+      sender: "blackline",
+      body: `[Automatic] Early payoff quote: ${behind ? `${money(s.amountDueNowCents)} past due + ${money(purchase)} early purchase = ${money(total)}` : money(purchase)}. Good through ${goodThrough}. We'll contact you to finalize.`,
+      read_by_admin: false,
+    },
+  ]);
+
+  const sent = await sendMail({
+    to: customer.email,
+    subject: `Your early payoff quote – ${vehicle}`,
+    text,
+    replyTo: site.accountsEmail,
+    fromName: "Blackline Motors",
+  }).catch(() => false);
+  await sendMail({
+    to: process.env.LEADS_ALERT_EMAIL || site.email,
+    subject: `Payoff requested: ${customer.full_name} – ${money(total)}`,
+    text: `${customer.full_name} (${customer.email}) requested an early payoff quote.\n\n${text}\n\nCustomer email ${sent ? "was sent" : "FAILED to send – contact them directly"}.\n${site.url}/portal/admin/customers/${customer.id}`,
+    fromName: "Blackline Motors Portal",
+  }).catch(() => false);
+
+  redirect(
+    sent
+      ? `/portal?ok=${q(`Your payoff quote (${money(total)}) is on its way to ${customer.email}. It's also in your Messages.`)}`
+      : `/portal?ok=${q(`Your payoff quote is ${money(total)}, good through ${goodThrough}. It's in your Messages, and we'll contact you to finalize.`)}`,
+  );
 }

@@ -5,7 +5,7 @@ import tls from "node:tls";
 // Env: SMTP_USER (Google login), SMTP_PASS (Google app password),
 //      SMTP_FROM (e.g. accounts@blacklinemotorsco.com).
 
-type Mail = { to: string; subject: string; text: string; replyTo?: string };
+type Mail = { to: string; subject: string; text: string; replyTo?: string; fromName?: string };
 
 export function mailerEnabled() {
   return Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
@@ -40,7 +40,7 @@ export async function sendMail(mail: Mail): Promise<boolean> {
 
     const body = mail.text.replace(/\r?\n/g, "\r\n").replace(/^\./gm, "..");
     const message = [
-      `From: ${encodeHeader("Blackline Motors Website")} <${from}>`,
+      `From: ${encodeHeader(mail.fromName ?? "Blackline Motors Website")} <${from}>`,
       `To: <${mail.to}>`,
       ...(mail.replyTo ? [`Reply-To: <${mail.replyTo}>`] : []),
       `Subject: ${encodeHeader(mail.subject)}`,

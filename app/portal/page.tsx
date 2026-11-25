@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { CustomerShell } from "@/components/portal/CustomerShell";
-import { Badge, ButtonLink, Card, Notice, Stat } from "@/components/portal/ui";
+import { Badge, ButtonLink, Card, Flash, Notice, Stat } from "@/components/portal/ui";
 import { requireCustomer } from "@/lib/portal/session";
 import { loadAgreements, loadInsurance, primaryAgreement } from "@/lib/portal/data";
 import { daysBetween, denverToday, money, prettyDate, vehicleName } from "@/lib/portal/account";
 import { site } from "@/lib/site";
+import { SubmitButton } from "@/components/portal/SubmitButton";
+import { requestPayoff } from "./actions";
 
-export default async function PortalHome() {
+export default async function PortalHome({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
   const { customer } = await requireCustomer();
 
   if (!customer) {
@@ -45,6 +52,7 @@ export default async function PortalHome() {
 
   return (
     <CustomerShell customer={customer} title="Your account">
+      <Flash params={params} />
       {a.status === "pending" && (
         <Notice>
           Your agreement is being finalized. Payment details will appear here once your vehicle is
@@ -92,7 +100,18 @@ export default async function PortalHome() {
         <Stat
           label="Left to ownership"
           value={money(s.remainingToOwnershipCents)}
-          hint="If you make every scheduled payment"
+          hint={
+            <>
+              If you make every scheduled payment
+              {a.status === "active" && (
+                <form action={requestPayoff} className="mt-3">
+                  <SubmitButton variant="secondary" pendingText="Requesting…" className="w-full !min-h-9 !px-3 !py-1.5 !text-xs">
+                    Request early payoff
+                  </SubmitButton>
+                </form>
+              )}
+            </>
+          }
         />
       </div>
 
@@ -120,12 +139,8 @@ export default async function PortalHome() {
           <dl className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-2 text-sm">
             <dt className="text-gray-500">Vehicle</dt>
             <dd className="font-semibold">{vehicleName(a)}</dd>
-            {a.vin && (
-              <>
-                <dt className="text-gray-500">VIN</dt>
-                <dd className="font-mono">{a.vin}</dd>
-              </>
-            )}
+            <dt className="text-gray-500">VIN</dt>
+            <dd className="font-mono">{a.vin || "—"}</dd>
             <dt className="text-gray-500">Agreement</dt>
             <dd>{a.agreement_number}</dd>
             <dt className="text-gray-500">Start date</dt>
