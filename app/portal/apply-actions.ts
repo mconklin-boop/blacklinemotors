@@ -1,6 +1,10 @@
 "use server";
 
 import { headers } from "next/headers";
+import { after } from "next/server";
+import { autoReviewEnabled, runAutoReview } from "@/lib/portal/review";
+import { startAgreementDraft } from "@/lib/portal/agreement-flow";
+import { pandadocEnabled } from "@/lib/portal/pandadoc";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { adminClient } from "@/lib/portal/supabase";
@@ -93,6 +97,10 @@ export async function removeApplicationDocument(formData: FormData) {
 // ---------- employment and references ----------
 
 const detailsSchema = z.object({
+  address_line1: z.string().trim().min(4).max(120),
+  city: z.string().trim().min(2).max(60),
+  state: z.string().trim().min(2).max(2).default("CO"),
+  zip: z.string().trim().regex(/^\d{5}(-\d{4})?$/),
   employer: z.string().trim().min(2).max(120),
   employerPhone: z.string().trim().max(30).optional().default(""),
   jobTitle: z.string().trim().max(80).optional().default(""),
@@ -108,7 +116,7 @@ export async function saveApplicationDetails(formData: FormData) {
   const customer = await requireApplicant();
   if (customer.stage !== "applicant") home("error", "Your application was already submitted.");
   const parsed = detailsSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) home("error", "Add your employer and two references with phone numbers.");
+  if (!parsed.success) home("error", "Add your home address, employer and two references with phone numbers.");
   const d = parsed.data!;
   const application = {
     ...customer.application,
@@ -120,9 +128,18 @@ export async function saveApplicationDetails(formData: FormData) {
       { name: d.ref2_name, phone: d.ref2_phone, relationship: d.ref2_relationship },
     ],
   };
-  const { error } = await adminClient().from("customers").update({ application }).eq("id", customer.id);
+  const { error } = await adminClient()
+    .from("customers")
+    .update({
+      application,
+      address_line1: d.address_line1,
+      city: d.city,
+      state: d.state.toUpperCase(),
+      zip: d.zip,
+    })
+    .eq("id", customer.id);
   if (error) home("error", "We couldn't save that. Please try again.");
-  home("ok", "Employment and references saved.");
+  home("ok", "Address, employment and references saved.");
 }
 
 // ---------- submit ----------
@@ -131,7 +148,7 @@ export async function submitApplication() {
   const customer = await requireApplicant();
   if (customer.stage !== "applicant") home("error", "Your application was already submitted.");
   const docs = (await loadDocuments(customer.id)).filter((d) => d.kind);
-  const check = applicationChecklist(customer.application, docs);
+  const check = applicationChecklist(customer.application, docs, customer);
   if (!Object.values(check).every(Boolean)) {
     home("error", "Finish every step on the checklist before you submit.");
   }
@@ -148,6 +165,11 @@ export async function submitApplication() {
     "Application received. We'll review your documents and post a decision here, usually within 1 business day.",
   );
   const base = await baseUrl();
+  if (autoReviewEnabled()) {
+    // Reads the documents after the page responds; approves clean passes.
+    after(() => runAutoReview(customer.id, base));
+    home("ok", "Application submitted. We're checking your documents now. Your decision will show here, usually within a few minutes.");
+  }
   const app = customer.application;
   await sendMail({
     to: adminAlertEmail(),
@@ -162,7 +184,7 @@ export async function submitApplication() {
       `Income: ${app.monthlyIncome ?? "—"}`,
       `Time at job: ${app.timeAtJob ?? "—"} (${app.employer ?? "—"}${app.jobTitle ? `, ${app.jobTitle}` : ""})`,
       `Time at address: ${app.timeAtAddress ?? "—"}`,
-      `Wants: ${app.vehicleWanted ?? "—"}`,
+      `Wants: ${app.vehicleWanted ?? "—"}${app.preferredModels ? ` (${app.preferredModels})` : ""} · Budget: ${app.budget ?? "—"}`,
       `Documents: ${docs.length} uploaded`,
       "",
       `Review and decide: ${base}/portal/admin/customers/${customer.id}`,
@@ -229,6 +251,9 @@ export async function selectOption(formData: FormData) {
         `Vehicle: ${name}${o.mileage ? ` · ${o.mileage.toLocaleString("en-US")} miles` : ""}`,
         `Terms offered: ${optionTerms(o)}`,
         o.cash_price_cents ? `Cash price: ${money(o.cash_price_cents)}` : null,
+        o.source ? `Source: ${o.source}${o.lot ? ` lot ${o.lot}` : ""}${o.listing_url ? ` · ${o.listing_url}` : ""}` : null,
+        o.all_in_cents ? `Estimated all-in: ${money(o.all_in_cents)}` : null,
+        pandadocEnabled() ? "PandaDoc draft is being created. After you buy, enter the VIN and condition on the customer's page to send it." : null,
         o.care_plan_note ? `Care Plan: ${o.care_plan_note}` : null,
         o.description ? `Notes: ${o.description}` : null,
         "",
@@ -245,5 +270,6 @@ export async function selectOption(formData: FormData) {
       text: `Hi ${customer.full_name.split(" ")[0]},\n\nThanks! You picked the ${name} (${optionTerms(o)}).\n\nWe're securing the vehicle now. We'll reach out about inspection, your agreement and delivery. Final terms are in your written agreement, which you'll review before you sign.\n\nYour portal: ${base}/portal\nQuestions? Call or text ${site.phoneDisplay}.\n\nBlackline Motors`,
     }),
   ]);
+  if (pandadocEnabled()) after(() => startAgreementDraft(o.id));
   home("ok", `You picked the ${name}. We'll be in touch about next steps.`);
 }

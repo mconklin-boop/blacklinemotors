@@ -72,14 +72,18 @@ export function optionTerms(o: VehicleOption) {
   return parts.join(" · ");
 }
 
-export function applicationChecklist(app: Application, docs: PortalDocument[]) {
+export function applicationChecklist(
+  app: Application,
+  docs: PortalDocument[],
+  customer?: Pick<Customer, "address_line1" | "zip">,
+) {
   const has = (kind: DocKind) => docs.filter((d) => d.kind === kind).length;
   const refs = (app.references ?? []).filter((r) => r.name && r.phone);
   return {
     license: has("license") >= 1,
     income: has("income") >= 1,
     residence: has("residence") >= 1,
-    details: Boolean(app.employer) && refs.length >= 2,
+    details: Boolean(app.employer) && refs.length >= 2 && (!customer || Boolean(customer.address_line1 && customer.zip)),
   };
 }
 

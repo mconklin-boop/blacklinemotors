@@ -17,6 +17,12 @@ const copy = {
     job: "Time at current job",
     address: "Time at current address",
     vehicle: "Vehicle you want",
+    models: "Makes or models you like (optional)",
+    modelsPh: "e.g. Honda CR-V, Toyota Camry, Ford F-150",
+    must: "Must-haves (optional)",
+    mustPh: "e.g. AWD, third row, under 120k miles",
+    budget: "Monthly payment you're comfortable with",
+    budgetOptions: ["Under $400", "$400 – $499", "$500 – $599", "$600 – $699", "$700 or more"],
     select: "Select one",
     incomeOptions: ["Under $2,500", "$2,500 – $2,999", "$3,000 – $3,999", "$4,000 – $4,999", "$5,000 or more"],
     timeOptions: ["Less than 6 months", "6 – 12 months", "1 – 2 years", "More than 2 years"],
@@ -38,6 +44,12 @@ const copy = {
     job: "Tiempo en su trabajo actual",
     address: "Tiempo en su domicilio actual",
     vehicle: "Vehículo que busca",
+    models: "Marcas o modelos que le gustan (opcional)",
+    modelsPh: "ej. Honda CR-V, Toyota Camry, Ford F-150",
+    must: "Lo indispensable (opcional)",
+    mustPh: "ej. tracción AWD, tercera fila, menos de 120k millas",
+    budget: "Pago mensual con el que se siente cómodo",
+    budgetOptions: ["Menos de $400", "$400 – $499", "$500 – $599", "$600 – $699", "$700 o más"],
     select: "Seleccione",
     incomeOptions: ["Menos de $2,500", "$2,500 – $2,999", "$3,000 – $3,999", "$4,000 – $4,999", "$5,000 o más"],
     timeOptions: ["Menos de 6 meses", "6 – 12 meses", "1 – 2 años", "Más de 2 años"],
@@ -165,6 +177,22 @@ export function PrequalForm({ lang = "en" }: { lang?: Lang }) {
         <SelectField name="timeAtJob" label={t.job} options={t.timeOptions} placeholder={t.select} />
         <SelectField name="timeAtAddress" label={t.address} options={t.timeOptions} placeholder={t.select} />
         <SelectField name="vehicleWanted" label={t.vehicle} options={t.vehicleOptions} placeholder={t.select} full />
+        <label className="block sm:col-span-2">
+          <span className={label}>{t.models}</span>
+          <input name="preferredModels" maxLength={200} placeholder={t.modelsPh} className={input} />
+        </label>
+        <label className="block sm:col-span-2">
+          <span className={label}>{t.must}</span>
+          <input name="mustHaves" maxLength={200} placeholder={t.mustPh} className={input} />
+        </label>
+        <SelectField
+          name="budget"
+          label={t.budget}
+          options={t.budgetOptions}
+          values={copy.en.budgetOptions}
+          placeholder={t.select}
+          full
+        />
       </div>
       <label className="mt-5 flex items-start gap-3 text-sm leading-6 text-gray-700">
         <input type="checkbox" name="contactConsent" value="yes" required className="mt-1 h-5 w-5 accent-[#e62e2e]" />
@@ -194,10 +222,12 @@ function SelectField({
   options,
   placeholder,
   full = false,
+  values,
 }: {
   name: string;
   label: string;
   options: readonly string[];
+  values?: readonly string[];
   placeholder: string;
   full?: boolean;
 }) {
@@ -213,8 +243,8 @@ function SelectField({
         <option value="" disabled>
           {placeholder}
         </option>
-        {options.map((option) => (
-          <option key={option} value={option}>
+        {options.map((option, i) => (
+          <option key={option} value={values?.[i] ?? option}>
             {option}
           </option>
         ))}

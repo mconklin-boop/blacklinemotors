@@ -17,6 +17,16 @@ export type Customer = {
   decided_at: string | null;
   decision_note: string | null;
   purge_warned_at: string | null;
+  review: AutoReview | null;
+};
+
+export type ReviewCheck = { label: string; ok: boolean; detail: string };
+export type AutoReview = {
+  ranAt: string;
+  outcome: "approved" | "needs_review" | "error";
+  summary: string;
+  checks: ReviewCheck[];
+  extracted?: Record<string, unknown>;
 };
 
 export type Reference = { name: string; phone: string; relationship: string };
@@ -26,6 +36,9 @@ export type Application = {
   timeAtJob?: string;
   timeAtAddress?: string;
   vehicleWanted?: string;
+  preferredModels?: string;
+  mustHaves?: string;
+  budget?: string;
   employer?: string;
   employerPhone?: string;
   jobTitle?: string;
@@ -53,6 +66,18 @@ export type VehicleOption = {
   expires_at: string | null;
   selected_at: string | null;
   created_at: string;
+  photo_url: string | null;
+  vehicle_class: string | null;
+  source: string | null;
+  lot: string | null;
+  listing_url: string | null;
+  all_in_cents: number | null;
+  rental_cents: number | null;
+  care_essential_cents: number | null;
+  care_plus_cents: number | null;
+  vin: string | null;
+  pandadoc_document_id: string | null;
+  pandadoc_status: string | null;
 };
 
 export type Agreement = {

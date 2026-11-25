@@ -9,6 +9,9 @@ import { SubmitButton } from "@/components/portal/SubmitButton";
 import { requestPayoff } from "./actions";
 import { ApplicationView } from "@/components/portal/ApplicationView";
 
+// Room for the automatic document review that runs after Submit.
+export const maxDuration = 60;
+
 export default async function PortalHome({
   searchParams,
 }: {

@@ -42,7 +42,7 @@ export async function ApplicationView({ customer }: { customer: Customer }) {
   const app = customer.application ?? {};
 
   if (customer.stage === "applicant") {
-    const check = applicationChecklist(app, docs);
+    const check = applicationChecklist(app, docs, customer);
     const ready = Object.values(check).every(Boolean);
     const daysLeft = daysLeftToSubmit(customer);
     const refs = app.references ?? [];
@@ -61,7 +61,7 @@ export async function ApplicationView({ customer }: { customer: Customer }) {
             <Step done={check.license}>Upload your driver&apos;s license</Step>
             <Step done={check.income}>Upload proof of income (two recent pay stubs)</Step>
             <Step done={check.residence}>Upload proof of residence</Step>
-            <Step done={check.details}>Add your employer and two references</Step>
+            <Step done={check.details}>Add your home address, employer and two references</Step>
           </ul>
           <form action={submitApplication} className="mt-5">
             <SubmitButton pendingText="Submitting…" disabled={!ready}>
@@ -107,8 +107,22 @@ export async function ApplicationView({ customer }: { customer: Customer }) {
           })}
         </div>
 
-        <Card title="Employment and references">
+        <Card title="Address, employment and references">
           <form action={saveApplicationDetails} className="grid gap-4 sm:grid-cols-3">
+            <div className="sm:col-span-3">
+              <Label text="Home street address *">
+                <input name="address_line1" required autoComplete="street-address" defaultValue={customer.address_line1 ?? ""} className={inputClass} />
+              </Label>
+            </div>
+            <Label text="City *">
+              <input name="city" required autoComplete="address-level2" defaultValue={customer.city ?? ""} className={inputClass} />
+            </Label>
+            <Label text="State *">
+              <input name="state" required maxLength={2} defaultValue={customer.state ?? "CO"} className={`${inputClass} uppercase`} />
+            </Label>
+            <Label text="ZIP *">
+              <input name="zip" required inputMode="numeric" autoComplete="postal-code" defaultValue={customer.zip ?? ""} className={inputClass} />
+            </Label>
             <Label text="Employer *">
               <input name="employer" required defaultValue={app.employer ?? ""} className={inputClass} />
             </Label>
@@ -148,8 +162,9 @@ export async function ApplicationView({ customer }: { customer: Customer }) {
       <Card title="Application submitted">
         <p className="flex items-center gap-2 text-sm text-gray-700">
           <Clock size={18} className="text-blackline-red" />
-          Submitted {prettyDateTime(customer.submitted_at)}. We&apos;re reviewing your documents and will post a
-          decision here, usually within 1 business day. We&apos;ll email you too.
+          Submitted {prettyDateTime(customer.submitted_at)}. We&apos;re reviewing your documents. Most decisions post
+          here within a few minutes; if we need a closer look, it can take up to 1 business day. We&apos;ll email you
+          either way.
         </p>
         <p className="mt-3 text-sm text-gray-600">
           Questions? Use Messages or call or text {site.phoneDisplay}.
@@ -184,7 +199,10 @@ export async function ApplicationView({ customer }: { customer: Customer }) {
   const photos = new Map<string, string>();
   await Promise.all(
     [...live, ...(selected ? [selected] : [])].map(async (o) => {
-      if (!o.photo_path) return;
+      if (!o.photo_path) {
+        if (o.photo_url) photos.set(o.id, o.photo_url);
+        return;
+      }
       const url = await signedFileUrl(o.photo_path, 3600);
       if (url) photos.set(o.id, url);
     }),

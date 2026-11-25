@@ -42,6 +42,9 @@ export async function POST(request: Request) {
         timeAtJob: d.timeAtJob,
         timeAtAddress: d.timeAtAddress,
         vehicleWanted: d.vehicleWanted,
+        preferredModels: d.preferredModels,
+        mustHaves: d.mustHaves,
+        budget: d.budget,
       },
     }).catch(() => false);
   }

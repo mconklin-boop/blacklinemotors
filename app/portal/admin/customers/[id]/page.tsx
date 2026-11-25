@@ -39,6 +39,9 @@ import {
   updateDocument,
 } from "../../actions";
 
+// Room for PandaDoc calls when sending an agreement.
+export const maxDuration = 60;
+
 const dollars = (cents: number | null | undefined) =>
   cents === null || cents === undefined ? "" : (cents / 100).toFixed(2);
 

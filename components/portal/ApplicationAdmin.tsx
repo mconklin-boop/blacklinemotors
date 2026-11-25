@@ -12,7 +12,10 @@ import {
   optionTerms,
   prettyDateTime,
 } from "@/lib/portal/applications";
+import { nextAgreementNumber } from "@/lib/portal/agreement-flow";
+import { pandadocEnabled, pandadocUrl } from "@/lib/portal/pandadoc";
 import {
+  finalizePurchase,
   addVehicleOption,
   createOptionPhotoUpload,
   decideApplication,
@@ -41,9 +44,11 @@ const statusTone = {
 export async function ApplicationAdmin({ customer, docs }: { customer: Customer; docs: PortalDocument[] }) {
   const app = customer.application ?? {};
   const appDocs = docs.filter((d) => d.kind);
-  const check = applicationChecklist(app, appDocs);
+  const check = applicationChecklist(app, appDocs, customer);
   const options = customer.stage === "approved" ? await loadOptions(customer.id, true) : [];
   const drafts = options.filter((o) => o.status === "draft");
+  const picked = options.find((o) => o.status === "selected");
+  const agreementNo = picked ? await nextAgreementNumber() : "";
   const [label, tone] = stageLabel[customer.stage];
 
   return (
@@ -65,6 +70,10 @@ export async function ApplicationAdmin({ customer, docs }: { customer: Customer;
               ["Employer phone", app.employerPhone],
               ["Time at address", app.timeAtAddress],
               ["Wants", app.vehicleWanted],
+              ["Makes/models", app.preferredModels],
+              ["Must-haves", app.mustHaves],
+              ["Budget", app.budget],
+              ["Address", [customer.address_line1, customer.city, customer.zip].filter(Boolean).join(", ")],
               ["Applied", prettyDateTime(customer.created_at)],
               ["Submitted", prettyDateTime(customer.submitted_at)],
             ].map(([k, v]) => (
@@ -118,6 +127,27 @@ export async function ApplicationAdmin({ customer, docs }: { customer: Customer;
           </div>
         </div>
 
+        {customer.review && (
+          <div className="mt-6 border-t border-gray-200 pt-5">
+            <p className="mb-2 text-sm font-bold">
+              Automatic review{" "}
+              <Badge tone={customer.review.outcome === "approved" ? "good" : customer.review.outcome === "error" ? "alert" : "warn"}>
+                {customer.review.outcome.replace("_", " ")}
+              </Badge>{" "}
+              <span className="font-normal text-gray-500">{prettyDateTime(customer.review.ranAt)}</span>
+            </p>
+            <p className="mb-3 text-sm text-gray-700">{customer.review.summary}</p>
+            <ul className="grid gap-1 text-sm sm:grid-cols-2">
+              {customer.review.checks.map((c) => (
+                <li key={c.label}>
+                  <span className={c.ok ? "text-green-700" : "font-semibold text-blackline-red"}>{c.ok ? "✓" : "✗"} {c.label}</span>
+                  <span className="block text-xs text-gray-500">{c.detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <form action={decideApplication} className="mt-6 grid gap-4 border-t border-gray-200 pt-5 sm:grid-cols-[220px_1fr_auto] sm:items-end">
           <input type="hidden" name="customer_id" value={customer.id} />
           <Label text="Decision">
@@ -139,6 +169,51 @@ export async function ApplicationAdmin({ customer, docs }: { customer: Customer;
           </p>
         )}
       </Card>
+
+      {picked && (
+        <Card title={`Bought it? Send the agreement · ${optionName(picked)}`}>
+          <p className="mb-4 text-sm text-gray-600">
+            {pandadocEnabled()
+              ? picked.pandadoc_document_id
+                ? <>PandaDoc draft is ready (<a href={pandadocUrl(picked.pandadoc_document_id)} target="_blank" rel="noopener" className="underline">open</a>). </>
+                : picked.pandadoc_status?.startsWith("error")
+                  ? `PandaDoc draft failed (${picked.pandadoc_status}); it will be created when you submit. `
+                  : "PandaDoc draft is being created. "
+              : "PandaDoc isn't connected yet; this will still create the portal agreement. "}
+            Enter what you know after buying. This fills the packet, sends it to the customer, then you and Iron Ridge, and
+            creates their portal agreement (pending until delivery).
+          </p>
+          <form action={finalizePurchase} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <input type="hidden" name="customer_id" value={customer.id} />
+            <input type="hidden" name="option_id" value={picked.id} />
+            <Label text="Agreement #"><input name="agreement_number" required defaultValue={agreementNo} className={inputClass} /></Label>
+            <div className="sm:col-span-2"><Label text="VIN *"><input name="vin" required minLength={17} maxLength={17} defaultValue={picked.vin ?? ""} className={`${inputClass} font-mono uppercase`} /></Label></div>
+            <Label text="Odometer *"><input name="odometer" required inputMode="numeric" defaultValue={picked.mileage?.toString() ?? ""} className={inputClass} /></Label>
+            <Label text="Color"><input name="color" className={inputClass} /></Label>
+            <Label text="Engine"><input name="engine" placeholder="2.4L 4-cyl, automatic" className={inputClass} /></Label>
+            <div className="sm:col-span-2"><Label text="Damage / known issues"><input name="damage" className={inputClass} /></Label></div>
+            <Label text="Delivery date *"><input name="delivery_date" type="date" required className={inputClass} /></Label>
+            <Label text="First payment due *"><input name="first_due_date" type="date" required className={inputClass} /></Label>
+            {[
+              ["Exterior", "Exterior"],
+              ["Interior", "Interior"],
+              ["Tires", "Tires"],
+              ["Brakes", "Brakes"],
+              ["Keys", "Keys"],
+              ["WarningLights", "Warning lights"],
+              ["OilChange", "Last oil change"],
+              ["RepairsMade", "Repairs made"],
+            ].map(([k, label]) => (
+              <Label key={k} text={`Condition: ${label}`}><input name={`cond_${k}`} className={inputClass} /></Label>
+            ))}
+            <div className="sm:col-span-2 lg:col-span-4">
+              <SubmitButton pendingText="Filling and sending…">
+                {pandadocEnabled() ? "Fill agreement & send for signing" : "Create portal agreement"}
+              </SubmitButton>
+            </div>
+          </form>
+        </Card>
+      )}
 
       {customer.stage === "approved" && (
         <Card
@@ -168,6 +243,23 @@ export async function ApplicationAdmin({ customer, docs }: { customer: Customer;
                       <td className="px-2 py-2">
                         {optionTerms(o)}
                         {o.cash_price_cents && <span className="block text-xs text-gray-500">Cash {money(o.cash_price_cents)}</span>}
+                        {o.all_in_cents && (
+                          <span className="block text-xs text-gray-500">
+                            Est. all-in {money(o.all_in_cents)}
+                            {o.rental_cents && o.term_payments ? ` · rental total ${money(o.rental_cents * o.term_payments)}` : ""}
+                          </span>
+                        )}
+                        {o.source && (
+                          <span className="block text-xs text-gray-500">
+                            {o.listing_url ? (
+                              <a href={o.listing_url} target="_blank" rel="noopener" className="underline">
+                                {o.source}{o.lot ? ` lot ${o.lot}` : ""}
+                              </a>
+                            ) : (
+                              <>{o.source}{o.lot ? ` lot ${o.lot}` : ""}</>
+                            )}
+                          </span>
+                        )}
                       </td>
                       <td className="px-2 py-2"><Badge tone={statusTone[st]}>{st.replace("_", " ")}</Badge></td>
                       <td className="px-2 py-2">{st === "selected" ? `Picked ${prettyDateTime(o.selected_at)}` : prettyDateTime(o.expires_at)}</td>

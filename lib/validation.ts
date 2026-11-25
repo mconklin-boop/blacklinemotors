@@ -115,6 +115,9 @@ export const prequalSchema = z.object({
   timeAtJob: required,
   timeAtAddress: required,
   vehicleWanted: required,
+  preferredModels: z.string().trim().max(200).optional().default(""),
+  mustHaves: z.string().trim().max(200).optional().default(""),
+  budget: required,
   contactConsent: z.literal("yes", {
     errorMap: () => ({ message: "Please agree so we can contact you." }),
   }),
