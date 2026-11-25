@@ -75,6 +75,9 @@ textarea {
 .utility-bar a {
   color: #e4e4e6;
 }
+.utility-bar .utility-links {
+  gap: 18px;
+}
 .nav-shell {
   height: 86px;
   display: flex;

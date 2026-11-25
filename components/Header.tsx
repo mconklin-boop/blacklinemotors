@@ -27,9 +27,12 @@ export function Header() {
           <MapPin size={12} /> Serving {site.serviceArea}
         </span>
         <span>Rent-to-own available. Flexible payments. Ask for details.</span>
-        <a href={site.phoneHref}>
-          <Phone size={12} /> {site.phoneDisplay}
-        </a>
+        <span className="utility-links">
+          <Link href="/portal/login">Customer login</Link>
+          <a href={site.phoneHref}>
+            <Phone size={12} /> {site.phoneDisplay}
+          </a>
+        </span>
       </div>
       <div className="nav-shell">
         <Link
@@ -80,6 +83,10 @@ export function Header() {
               <ArrowUpRight size={17} />
             </Link>
           ))}
+          <Link href="/portal/login" onClick={() => setOpen(false)}>
+            Customer login
+            <ArrowUpRight size={17} />
+          </Link>
           <Link href="/contact" onClick={() => setOpen(false)}>
             Contact
             <ArrowUpRight size={17} />

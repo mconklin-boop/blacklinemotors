@@ -33,6 +33,7 @@ export function Footer() {
           <Link href="/sell-your-vehicle">Sell your vehicle</Link>
           <Link href="/request-vehicle">Request a vehicle</Link>
           <Link href="/about">About Blackline</Link>
+          <Link href="/portal/login">Customer login</Link>
         </div>
         <div>
           <h3>Talk to us</h3>
