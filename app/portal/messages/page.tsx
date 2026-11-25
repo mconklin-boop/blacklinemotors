@@ -33,7 +33,7 @@ export default async function MessagesPage({
           {messages.length === 0 && (
             <p className="text-sm text-gray-600">
               Questions about your account, a payment date, or your vehicle? Send us a message and
-              we&apos;ll reply here. For anything urgent, call or text {site.phoneDisplay}.
+              we&apos;ll reply here. For anything urgent, call or text {site.phoneDisplay}, or email {site.accountsEmail}.
             </p>
           )}
           {messages.map((m) => (

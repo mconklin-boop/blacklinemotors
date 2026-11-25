@@ -54,8 +54,8 @@ export default async function LoginPage({
             <Link href="/portal/forgot-password" className="font-semibold underline">
               Forgot password?
             </Link>
-            <a href={site.phoneHref} className="text-gray-600 underline">
-              Need help? {site.phoneDisplay}
+            <a href={`mailto:${site.accountsEmail}`} className="text-gray-600 underline">
+              Need help? {site.accountsEmail}
             </a>
           </div>
         </Card>

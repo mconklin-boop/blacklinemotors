@@ -8,6 +8,8 @@ export const site = {
   phoneHref: "tel:+17206148248",
   smsHref: "sms:+17206148248",
   email: "mike@blacklinemotorsco.com",
+  // Back-office address for rent-to-own customer accounts (portal, billing).
+  accountsEmail: "accounts@blacklinemotorsco.com",
   location: "Aurora, Colorado",
   serviceArea: "Aurora and east Denver",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.blacklinemotorsco.com",

@@ -15,7 +15,7 @@ export default async function DocumentsPage() {
       {docs.length === 0 ? (
         <Notice>
           Your signed agreement and other documents will appear here. Need a copy now? Email{" "}
-          {site.email}.
+          {site.accountsEmail}.
         </Notice>
       ) : (
         <Card>
