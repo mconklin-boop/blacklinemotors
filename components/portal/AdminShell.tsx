@@ -14,6 +14,9 @@ export function AdminShell({ title, children }: { title: string; children: React
           <Link href="/portal/admin" className="hover:text-blackline-red">
             All customers
           </Link>
+          <Link href="/portal/admin/applications" className="hover:text-blackline-red">
+            Applications
+          </Link>
           <Link href="/portal/admin/leads" className="hover:text-blackline-red">
             Website leads
           </Link>

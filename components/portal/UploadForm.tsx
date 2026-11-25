@@ -12,6 +12,7 @@ export function UploadForm({
   submitLabel,
   children,
   extraUploadArg,
+  fileOptional = false,
 }: {
   getUploadUrl: (fileName: string, extra?: string) => Promise<{ path?: string; token?: string; error?: string }>;
   onSubmit: (formData: FormData) => Promise<void>;
@@ -20,6 +21,7 @@ export function UploadForm({
   submitLabel: string;
   children?: ReactNode;
   extraUploadArg?: string;
+  fileOptional?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +32,14 @@ export function UploadForm({
     const formEl = event.currentTarget;
     const form = new FormData(formEl);
     const file = form.get("file");
+    if (fileOptional && (!(file instanceof File) || file.size === 0)) {
+      setBusy(true);
+      form.delete("file");
+      await onSubmit(form);
+      setBusy(false);
+      formEl.reset();
+      return;
+    }
     if (!(file instanceof File) || file.size === 0) {
       setError("Choose a file to upload.");
       return;
@@ -74,7 +84,7 @@ export function UploadForm({
           name="file"
           type="file"
           accept={accept}
-          required
+          required={!fileOptional}
           className="block w-full text-sm file:mr-3 file:rounded-md file:border-0 file:bg-blackline-black file:px-4 file:py-2 file:font-bold file:text-white"
         />
       </label>

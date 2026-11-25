@@ -9,9 +9,10 @@ type Lang = "en" | "es";
 const copy = {
   en: {
     title: "Get pre-qualified",
-    intro: "Takes about 2 minutes. No documents needed here.",
+    intro: "Takes about 2 minutes. We'll email you a secure link to upload documents.",
     name: "Full name",
     phone: "Mobile phone",
+    email: "Email",
     income: "Gross monthly income (before taxes)",
     job: "Time at current job",
     address: "Time at current address",
@@ -21,7 +22,7 @@ const copy = {
     timeOptions: ["Less than 6 months", "6 – 12 months", "1 – 2 years", "More than 2 years"],
     vehicleOptions: ["Car / sedan", "SUV", "Minivan", "Truck", "Not sure yet"],
     consent: `I agree that Blackline Motors may call or text me at this number about my inquiry. Message and data rates may apply. Consent is not a condition of any purchase.`,
-    privacy: "Never send your ID, pay stubs or bank info through Facebook or text. We collect documents in person or by secure upload.",
+    privacy: "Never send your ID, pay stubs or bank info through Facebook or text. Upload them only in your secure Blackline portal.",
     submit: "Check if I pre-qualify",
     sending: "Sending...",
     callNow: "Call us",
@@ -29,9 +30,10 @@ const copy = {
   },
   es: {
     title: "Precalifique",
-    intro: "Toma unos 2 minutos. No necesita documentos aquí.",
+    intro: "Toma unos 2 minutos. Le enviaremos un enlace seguro para subir sus documentos.",
     name: "Nombre completo",
     phone: "Teléfono celular",
+    email: "Correo electrónico",
     income: "Ingreso mensual bruto (antes de impuestos)",
     job: "Tiempo en su trabajo actual",
     address: "Tiempo en su domicilio actual",
@@ -41,7 +43,7 @@ const copy = {
     timeOptions: ["Menos de 6 meses", "6 – 12 meses", "1 – 2 años", "Más de 2 años"],
     vehicleOptions: ["Carro / sedán", "SUV", "Minivan", "Camioneta (pickup)", "Todavía no sé"],
     consent: `Acepto que Blackline Motors me llame o envíe mensajes de texto a este número sobre mi solicitud. Pueden aplicar tarifas de mensajes y datos. El consentimiento no es condición de compra.`,
-    privacy: "Nunca envíe su identificación, talones de pago ni datos bancarios por Facebook o mensaje de texto. Recibimos documentos en persona o por un enlace seguro.",
+    privacy: "Nunca envíe su identificación, talones de pago ni datos bancarios por Facebook o mensaje de texto. Súbalos solo en su portal seguro de Blackline.",
     submit: "Ver si precalifico",
     sending: "Enviando...",
     callNow: "Llámenos",
@@ -154,6 +156,10 @@ export function PrequalForm({ lang = "en" }: { lang?: Lang }) {
         <label className="block sm:col-span-2">
           <span className={label}>{t.phone} *</span>
           <input name="phone" type="tel" required autoComplete="tel" inputMode="tel" className={input} />
+        </label>
+        <label className="block sm:col-span-2">
+          <span className={label}>{t.email} *</span>
+          <input name="email" type="email" required autoComplete="email" maxLength={160} className={input} />
         </label>
         <SelectField name="monthlyIncome" label={t.income} options={t.incomeOptions} placeholder={t.select} full />
         <SelectField name="timeAtJob" label={t.job} options={t.timeOptions} placeholder={t.select} />

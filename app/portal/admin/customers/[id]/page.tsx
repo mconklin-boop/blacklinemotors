@@ -5,6 +5,7 @@ import { AdminShell } from "@/components/portal/AdminShell";
 import { Badge, Card, Flash, Label, Notice, Stat, Table, inputClass } from "@/components/portal/ui";
 import { SubmitButton } from "@/components/portal/SubmitButton";
 import { UploadForm } from "@/components/portal/UploadForm";
+import { ApplicationAdmin } from "@/components/portal/ApplicationAdmin";
 import { requireAdmin } from "@/lib/portal/session";
 import { adminClient } from "@/lib/portal/supabase";
 import {
@@ -167,6 +168,7 @@ export default async function AdminCustomerPage({
   return (
     <AdminShell title={customer.full_name}>
       <Flash params={flash} />
+      {customer.stage && customer.stage !== "customer" && <ApplicationAdmin customer={customer} docs={docs} />}
 
       {account && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

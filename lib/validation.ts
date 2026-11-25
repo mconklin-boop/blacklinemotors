@@ -104,12 +104,13 @@ export const financingSchema = z.object({
   comments: z.string().optional()
 });
 
-// Rent-to-own pre-qualification. Collect ONLY these six fields online.
-// ID, pay stubs and other documents are collected in person or by secure upload.
+// Rent-to-own pre-qualification. Collect ONLY these fields here.
+// ID, pay stubs and other documents are uploaded later inside the secure portal.
 const optionalTracking = z.string().max(300).optional();
 export const prequalSchema = z.object({
   name: required.max(120),
   phone,
+  email: z.string().trim().toLowerCase().email("Enter a valid email."),
   monthlyIncome: required,
   timeAtJob: required,
   timeAtAddress: required,

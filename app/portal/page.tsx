@@ -7,6 +7,7 @@ import { daysBetween, denverToday, money, prettyDate, vehicleName } from "@/lib/
 import { site } from "@/lib/site";
 import { SubmitButton } from "@/components/portal/SubmitButton";
 import { requestPayoff } from "./actions";
+import { ApplicationView } from "@/components/portal/ApplicationView";
 
 export default async function PortalHome({
   searchParams,
@@ -23,6 +24,21 @@ export default async function PortalHome({
           Your sign-in works, but your account isn&apos;t connected to an agreement yet. Call or
           text {site.phoneDisplay} and we&apos;ll finish setting it up.
         </Notice>
+      </CustomerShell>
+    );
+  }
+
+  if (customer.stage && customer.stage !== "customer") {
+    const titles = {
+      applicant: "Your application",
+      submitted: "Your application",
+      approved: "Your vehicle options",
+      declined: "Your application",
+    } as const;
+    return (
+      <CustomerShell customer={customer} title={titles[customer.stage]}>
+        <Flash params={params} />
+        <ApplicationView customer={customer} />
       </CustomerShell>
     );
   }

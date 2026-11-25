@@ -87,7 +87,7 @@ const promises = [
 ];
 
 const steps = [
-  { icon: ClipboardCheck, title: "Get pre-qualified", text: "Six quick questions online. No documents, no Social Security number." },
+  { icon: ClipboardCheck, title: "Get pre-qualified", text: "A few quick questions online, then upload documents in your secure portal." },
   { icon: Search, title: "We find your vehicle", text: "We source a reliable, clean-title vehicle that fits what you need." },
   { icon: Wrench, title: "Inspected & reconditioned", text: "A master mechanic inspects it and fixes what needs fixing first." },
   { icon: KeyRound, title: "Drive it home", text: "Sign a clear written agreement, set up insurance, and drive." },

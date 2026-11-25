@@ -29,7 +29,7 @@ export async function CustomerShell({
     <PortalFrame
       title={title}
       eyebrow={customer ? `Welcome, ${customer.full_name.split(" ")[0]}` : "Customer portal"}
-      nav={<PortalNav unread={unread} />}
+      nav={<PortalNav unread={unread} applicant={!!customer?.stage && customer.stage !== "customer"} />}
       actions={
         <form action={signOut}>
           <SubmitButton variant="secondary" pendingText="Signing out…">

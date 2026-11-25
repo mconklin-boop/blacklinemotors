@@ -12,14 +12,21 @@ const customerLinks = [
   ["Profile", "/portal/profile"],
 ];
 
-export function PortalNav({ unread = 0 }: { unread?: number }) {
+const applicantLinks = [
+  ["Application", "/portal"],
+  ["Messages", "/portal/messages"],
+  ["Profile", "/portal/profile"],
+];
+
+export function PortalNav({ unread = 0, applicant = false }: { unread?: number; applicant?: boolean }) {
   const pathname = usePathname();
+  const links = applicant ? applicantLinks : customerLinks;
   return (
     <nav
       aria-label="Portal"
       className="flex gap-1 overflow-x-auto border-b border-gray-300 text-sm font-bold"
     >
-      {customerLinks.map(([label, href]) => {
+      {links.map(([label, href]) => {
         const active = href === "/portal" ? pathname === href : pathname.startsWith(href);
         return (
           <Link

@@ -7,6 +7,7 @@ import { ArrowUpRight, Menu, X, MapPin, Phone, MessageSquare } from "lucide-reac
 import { site } from "@/lib/site";
 
 const links = [
+  ["Home", "/"],
   ["Rent-to-own", "/rent-to-own"],
   ["How it works", "/rent-to-own#how-it-works"],
   ["Requirements", "/rent-to-own#requirements"],

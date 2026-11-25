@@ -10,6 +10,49 @@ export type Customer = {
   zip: string | null;
   stripe_customer_id: string | null;
   created_at: string;
+  stage: "applicant" | "submitted" | "approved" | "declined" | "customer";
+  application: Application;
+  language: "en" | "es";
+  submitted_at: string | null;
+  decided_at: string | null;
+  decision_note: string | null;
+  purge_warned_at: string | null;
+};
+
+export type Reference = { name: string; phone: string; relationship: string };
+
+export type Application = {
+  monthlyIncome?: string;
+  timeAtJob?: string;
+  timeAtAddress?: string;
+  vehicleWanted?: string;
+  employer?: string;
+  employerPhone?: string;
+  jobTitle?: string;
+  references?: Reference[];
+};
+
+export type VehicleOption = {
+  id: string;
+  customer_id: string;
+  status: "draft" | "offered" | "selected" | "not_selected" | "expired" | "withdrawn";
+  vehicle_year: number | null;
+  vehicle_make: string;
+  vehicle_model: string;
+  vehicle_trim: string | null;
+  mileage: number | null;
+  photo_path: string | null;
+  description: string | null;
+  cash_price_cents: number | null;
+  down_payment_cents: number;
+  payment_cents: number;
+  frequency: "monthly" | "biweekly" | "weekly";
+  term_payments: number | null;
+  care_plan_note: string | null;
+  sent_at: string | null;
+  expires_at: string | null;
+  selected_at: string | null;
+  created_at: string;
 };
 
 export type Agreement = {
@@ -72,6 +115,7 @@ export type PortalDocument = {
   title: string;
   storage_path: string;
   visible_to_customer: boolean;
+  kind: string | null;
   created_at: string;
 };
 

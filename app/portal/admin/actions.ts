@@ -159,6 +159,8 @@ export async function saveAgreement(formData: FormData) {
     ? await db.from("agreements").update(row).eq("id", agreementId)
     : await db.from("agreements").insert(row);
   if (error) back(customerId, "error", error.message);
+  // An agreement turns an applicant into a regular customer account.
+  await db.from("customers").update({ stage: "customer" }).eq("id", customerId).neq("stage", "customer");
   back(customerId, "ok", agreementId ? "Agreement updated." : "Agreement created.");
 }
 

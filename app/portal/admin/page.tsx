@@ -28,6 +28,7 @@ export default async function AdminHome({
   ]);
   const newLeads = l.count ?? 0;
   const customers = (c.data ?? []) as Customer[];
+  const toReview = customers.filter((x) => x.stage === "submitted").length;
   const agreements = (a.data ?? []) as Agreement[];
   const payments = (p.data ?? []) as Payment[];
   const fees = (f.data ?? []) as Fee[];
@@ -88,6 +89,14 @@ export default async function AdminHome({
         </Notice>
       )}
       {!portalEnabled() && <Notice tone="error">Supabase isn&apos;t connected.</Notice>}
+      {toReview > 0 && (
+        <Notice tone="warning">
+          {toReview} {toReview === 1 ? "application is" : "applications are"} ready to review.{" "}
+          <Link href="/portal/admin/applications" className="font-bold underline">
+            Open applications
+          </Link>
+        </Notice>
+      )}
       {newLeads > 0 && (
         <Notice tone="warning">
           {newLeads} new website {newLeads === 1 ? "lead" : "leads"} waiting.{" "}
